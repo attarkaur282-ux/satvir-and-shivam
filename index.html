@@ -127,6 +127,8 @@ button:hover{transform:translateY(-2px)}
 .remember-row input[type="checkbox"]{width:auto;margin:0;accent-color:#00ff00}
 .api-check-badge{display:inline-block;background:rgba(255,152,0,0.2);border:1px solid #ff9800;border-radius:20px;padding:10px 20px;margin:10px 0;cursor:pointer;font-size:14px;color:#ff9800;transition:all 0.3s}
 .api-check-badge:hover{background:rgba(255,152,0,0.4);box-shadow:0 0 15px rgba(255,152,0,0.3)}
+.danger-btn{background:#ff4444!important;border-color:#ff4444!important;color:#fff!important}
+.danger-btn:hover{background:#cc0000!important;box-shadow:0 0 20px rgba(255,0,0,0.6)!important}
 </style>
 </head>
 <body class="theme-hacker">
@@ -249,6 +251,10 @@ button:hover{transform:translateY(-2px)}
                 <h4 style="color:gold;margin-top:15px;">🔓 Unban User</h4>
                 <input type="text" id="unbanUserId" placeholder="User ID to unban"><button onclick="unbanUser()">✅ Unban User</button><div id="unbanMsg"></div>
                 <h4 style="color:gold;margin-top:15px;">📋 Banned Users</h4><div id="bannedUsersList" style="max-height:200px;overflow-y:auto;"></div>
+                <h4 style="color:gold;margin-top:15px;">🗑️ Delete "user*" Accounts</h4>
+                <p style="font-size:12px;opacity:0.7;">Deletes all accounts whose username starts with "user"</p>
+                <button onclick="deleteUserAccounts()" class="danger-btn">⚠️ Delete All "user*" Accounts</button>
+                <div id="deleteMsg"></div>
                 <h4 style="color:gold;margin-top:15px;">👥 All Users</h4><div id="allUsersList" style="max-height:300px;overflow-y:auto;"></div>
                 <h4 style="color:gold;margin-top:15px;">🖼️ Background</h4>
                 <input type="text" id="posterUrl" placeholder="New Background Image URL"><button onclick="updateBackground()">💾 Update</button><div id="adminMsg"></div>
@@ -321,25 +327,8 @@ function nextTrack(){loadTrack((cTrack+1)%tracks.length);if(isPlaying)bgMusic.pl
 function changeVolume(v){bgMusic.volume=v/100;}
 document.addEventListener('click',function initAudio(){if(!isPlaying&&bgMusic.src&&bgMusic.src!==location.href){bgMusic.play().then(()=>{document.getElementById('musicToggleBtn').textContent='⏸️';isPlaying=true;}).catch(()=>{});}},{once:true});
 
-// ==================== DATABASE (FIXED) ====================
-function getDB(){
-    let raw=localStorage.getItem('numberInfoDB');
-    if(!raw){
-        let db={
-            users:{
-                "1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:[],following:[],isAdmin:true,createdAt:new Date().toISOString(),dp:""},
-                "11111111":{userId:"11111111",email:"demo@test.com",username:"demo",password:"demo123",coins:50,followers:["11111112"],following:["11111112"],createdAt:new Date().toISOString(),dp:""},
-                "11111112":{userId:"11111112",email:"test@test.com",username:"testuser",password:"test123",coins:50,followers:["11111111"],following:["11111111"],createdAt:new Date().toISOString(),dp:""}
-            },
-            userIdCounter:11111112,
-            emails:{"admin@pro.com":"1","demo@test.com":"11111111","test@test.com":"11111112"},
-            messages:{},chats:{},bans:{}
-        };
-        saveDB(db);
-        return db;
-    }
-    return JSON.parse(raw);
-}
+// ==================== DATABASE ====================
+function getDB(){let raw=localStorage.getItem('numberInfoDB');if(!raw){let db={users:{"1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:[],following:[],isAdmin:true,createdAt:new Date().toISOString(),dp:""},"11111111":{userId:"11111111",email:"demo@test.com",username:"demo",password:"demo123",coins:50,followers:["11111112"],following:["11111112"],createdAt:new Date().toISOString(),dp:""},"11111112":{userId:"11111112",email:"test@test.com",username:"testuser",password:"test123",coins:50,followers:["11111111"],following:["11111111"],createdAt:new Date().toISOString(),dp:""}},userIdCounter:11111112,emails:{"admin@pro.com":"1","demo@test.com":"11111111","test@test.com":"11111112"},messages:{},chats:{},bans:{}};saveDB(db);return db;}return JSON.parse(raw);}
 function saveDB(db){localStorage.setItem('numberInfoDB',JSON.stringify(db));}
 
 let currentUser=null,currentChatPartner=null,chatRefreshInterval=null,lastRawData=null;
@@ -351,19 +340,8 @@ let banTimerInterval=null;
 function isBanned(uid){let db=getDB();if(!db.bans||!db.bans[uid])return false;if(Date.now()>=db.bans[uid]){delete db.bans[uid];saveDB(db);return false;}return true;}
 function getBanRemaining(uid){let db=getDB();if(!db.bans||!db.bans[uid])return 0;let r=db.bans[uid]-Date.now();return r>0?Math.ceil(r/1000):0;}
 function formatTime(s){if(s<=0)return"00:00:00";let h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
-function showBanScreen(user){
-    document.getElementById('authSection').style.display='none';document.getElementById('appSection').style.display='none';
-    document.getElementById('banSection').style.display='block';document.getElementById('banUsername').innerText=user.username;
-    let av=document.getElementById('banAvatar'),da=document.getElementById('banDefaultAvatar');
-    if(user.dp){av.src=user.dp;av.style.display='block';da.style.display='none';}else{av.style.display='none';da.style.display='block';}
-    updateBanTimer(user.userId);if(banTimerInterval)clearInterval(banTimerInterval);banTimerInterval=setInterval(()=>updateBanTimer(user.userId),1000);
-}
-function updateBanTimer(uid){
-    let r=getBanRemaining(uid);document.getElementById('banTimer').innerText=formatTime(r);
-    if(r<=0){clearInterval(banTimerInterval);banTimerInterval=null;let db=getDB();if(db.bans&&db.bans[uid])delete db.bans[uid];saveDB(db);
-    document.getElementById('banSection').style.display='none';document.getElementById('authSection').style.display='block';
-    showLoginForm();document.getElementById('loginError').innerHTML='<span style="color:#a8ff78;">✅ Ban expired!</span>';}
-}
+function showBanScreen(user){document.getElementById('authSection').style.display='none';document.getElementById('appSection').style.display='none';document.getElementById('banSection').style.display='block';document.getElementById('banUsername').innerText=user.username;let av=document.getElementById('banAvatar'),da=document.getElementById('banDefaultAvatar');if(user.dp){av.src=user.dp;av.style.display='block';da.style.display='none';}else{av.style.display='none';da.style.display='block';}updateBanTimer(user.userId);if(banTimerInterval)clearInterval(banTimerInterval);banTimerInterval=setInterval(()=>updateBanTimer(user.userId),1000);}
+function updateBanTimer(uid){let r=getBanRemaining(uid);document.getElementById('banTimer').innerText=formatTime(r);if(r<=0){clearInterval(banTimerInterval);banTimerInterval=null;let db=getDB();if(db.bans&&db.bans[uid])delete db.bans[uid];saveDB(db);document.getElementById('banSection').style.display='none';document.getElementById('authSection').style.display='block';showLoginForm();document.getElementById('loginError').innerHTML='<span style="color:#a8ff78;">✅ Ban expired!</span>';}}
 function hideBanScreen(){document.getElementById('banSection').style.display='none';if(banTimerInterval){clearInterval(banTimerInterval);banTimerInterval=null;}}
 
 // ==================== SESSION ====================
@@ -377,43 +355,11 @@ function closeBannerPopup(){document.getElementById('bannerPopup').style.display
 function loadBackground(){let s=localStorage.getItem("global_background_url"),bg=s||DEFAULT_BG;document.getElementById("bgImage").src=bg;loadBanner(bg);if(!s)localStorage.setItem("global_background_url",DEFAULT_BG);}
 function updateBackground(){let u=document.getElementById('posterUrl').value.trim();if(!u){document.getElementById('adminMsg').innerHTML='<span class="error-msg">❌ Enter URL</span>';return;}localStorage.setItem("global_background_url",u);document.getElementById("bgImage").src=u;loadBanner(u);document.getElementById('adminMsg').innerHTML='<span class="success-msg">✅ Updated!</span>';document.getElementById('posterUrl').value='';setTimeout(()=>{document.getElementById('adminMsg').innerHTML='';},3000);}
 
-// ==================== AUTH (FIXED SIGNUP) ====================
+// ==================== AUTH ====================
 function showLoginForm(){document.getElementById('loginForm').style.display='block';document.getElementById('signupForm').style.display='none';document.querySelectorAll('.auth-toggle button')[0].classList.add('active');document.querySelectorAll('.auth-toggle button')[1].classList.remove('active');}
 function showSignupForm(){document.getElementById('loginForm').style.display='none';document.getElementById('signupForm').style.display='block';document.querySelectorAll('.auth-toggle button')[0].classList.remove('active');document.querySelectorAll('.auth-toggle button')[1].classList.add('active');}
-function handleSignup(){
-    let em=document.getElementById('signupEmail').value.trim().toLowerCase();
-    let un=document.getElementById('signupUsername').value.trim();
-    let pw=document.getElementById('signupPassword').value;
-    let cp=document.getElementById('signupConfirmPassword').value;
-    document.getElementById('signupError').innerHTML='';document.getElementById('signupSuccess').innerHTML='';
-    if(!em||!un||!pw||!cp){document.getElementById('signupError').innerHTML='❌ All fields required';return;}
-    if(!em.includes('@')||!em.includes('.')){document.getElementById('signupError').innerHTML='❌ Invalid email';return;}
-    if(pw!==cp){document.getElementById('signupError').innerHTML='❌ Passwords mismatch';return;}
-    if(pw.length<4){document.getElementById('signupError').innerHTML='❌ Min 4 chars';return;}
-    let db=getDB();
-    if(db.emails[em]){document.getElementById('signupError').innerHTML='❌ Email already registered!';return;}
-    for(let uid in db.users){if(db.users[uid].username.toLowerCase()===un.toLowerCase()){document.getElementById('signupError').innerHTML='❌ Username taken';return;}}
-    // Generate UNIQUE ID
-    db.userIdCounter++;
-    let newId=db.userIdCounter.toString();
-    while(db.users[newId]){db.userIdCounter++;newId=db.userIdCounter.toString();}
-    db.users[newId]={userId:newId,email:em,username:un,password:pw,coins:50,followers:[],following:[],createdAt:new Date().toISOString(),dp:""};
-    db.emails[em]=newId;
-    saveDB(db);
-    document.getElementById('signupSuccess').innerHTML='✅ Created! Your ID: <strong>'+newId+'</strong>';
-    ['signupEmail','signupUsername','signupPassword','signupConfirmPassword'].forEach(id=>document.getElementById(id).value='');
-    setTimeout(()=>{showLoginForm();document.getElementById('loginUsername').value=un;},2000);
-}
-function handleLogin(){
-    let un=document.getElementById('loginUsername').value.trim(),pw=document.getElementById('loginPassword').value.trim();
-    document.getElementById('loginError').innerHTML='';
-    if(!un||!pw){document.getElementById('loginError').innerHTML='❌ Enter credentials';return;}
-    let db=getDB();
-    if(un==='index.india'&&pw==='index.india'){currentUser=db.users["1"];if(document.getElementById('rememberMe').checked)saveSession("1");showApp();return;}
-    if(un.includes('@')){let uid=db.emails[un.toLowerCase()];if(uid&&db.users[uid]&&db.users[uid].password===pw){if(isBanned(uid)){showBanScreen(db.users[uid]);return;}currentUser=db.users[uid];if(document.getElementById('rememberMe').checked)saveSession(uid);showApp();return;}}
-    for(let uid in db.users){if(db.users[uid].username===un&&db.users[uid].password===pw){if(isBanned(uid)){showBanScreen(db.users[uid]);return;}currentUser=db.users[uid];if(document.getElementById('rememberMe').checked)saveSession(uid);showApp();return;}}
-    document.getElementById('loginError').innerHTML='❌ Invalid credentials';
-}
+function handleSignup(){let em=document.getElementById('signupEmail').value.trim().toLowerCase(),un=document.getElementById('signupUsername').value.trim(),pw=document.getElementById('signupPassword').value,cp=document.getElementById('signupConfirmPassword').value;document.getElementById('signupError').innerHTML='';document.getElementById('signupSuccess').innerHTML='';if(!em||!un||!pw||!cp){document.getElementById('signupError').innerHTML='❌ All fields required';return;}if(!em.includes('@')||!em.includes('.')){document.getElementById('signupError').innerHTML='❌ Invalid email';return;}if(pw!==cp){document.getElementById('signupError').innerHTML='❌ Passwords mismatch';return;}if(pw.length<4){document.getElementById('signupError').innerHTML='❌ Min 4 chars';return;}let db=getDB();if(db.emails[em]){document.getElementById('signupError').innerHTML='❌ Email already registered!';return;}for(let uid in db.users){if(db.users[uid].username.toLowerCase()===un.toLowerCase()){document.getElementById('signupError').innerHTML='❌ Username taken';return;}}db.userIdCounter++;let newId=db.userIdCounter.toString();while(db.users[newId]){db.userIdCounter++;newId=db.userIdCounter.toString();}db.users[newId]={userId:newId,email:em,username:un,password:pw,coins:50,followers:[],following:[],createdAt:new Date().toISOString(),dp:""};db.emails[em]=newId;saveDB(db);document.getElementById('signupSuccess').innerHTML='✅ Created! Your ID: <strong>'+newId+'</strong>';['signupEmail','signupUsername','signupPassword','signupConfirmPassword'].forEach(id=>document.getElementById(id).value='');setTimeout(()=>{showLoginForm();document.getElementById('loginUsername').value=un;},2000);}
+function handleLogin(){let un=document.getElementById('loginUsername').value.trim(),pw=document.getElementById('loginPassword').value.trim();document.getElementById('loginError').innerHTML='';if(!un||!pw){document.getElementById('loginError').innerHTML='❌ Enter credentials';return;}let db=getDB();if(un==='index.india'&&pw==='index.india'){currentUser=db.users["1"];if(document.getElementById('rememberMe').checked)saveSession("1");showApp();return;}if(un.includes('@')){let uid=db.emails[un.toLowerCase()];if(uid&&db.users[uid]&&db.users[uid].password===pw){if(isBanned(uid)){showBanScreen(db.users[uid]);return;}currentUser=db.users[uid];if(document.getElementById('rememberMe').checked)saveSession(uid);showApp();return;}}for(let uid in db.users){if(db.users[uid].username===un&&db.users[uid].password===pw){if(isBanned(uid)){showBanScreen(db.users[uid]);return;}currentUser=db.users[uid];if(document.getElementById('rememberMe').checked)saveSession(uid);showApp();return;}}document.getElementById('loginError').innerHTML='❌ Invalid credentials';}
 function autoLogin(uid){let db=getDB(),user=db.users[uid];if(!user)return false;if(isBanned(uid)){showBanScreen(user);return true;}currentUser=user;showApp();return true;}
 function showApp(){hideBanScreen();document.getElementById('authSection').style.display='none';document.getElementById('appSection').style.display='block';updateUI();startChatRefresh();}
 function logout(){stopChatRefresh();currentUser=null;currentChatPartner=null;hideBanScreen();clearSession();document.getElementById('authSection').style.display='block';document.getElementById('appSection').style.display='none';document.getElementById('loginUsername').value='';document.getElementById('loginPassword').value='';document.getElementById('phoneNumber').value='';document.getElementById('result').innerHTML='<div class="result-card" style="text-align:center;opacity:0.7;">✨ Enter a number</div>';showLoginForm();}
@@ -429,22 +375,8 @@ function closeProfileEditor(){document.getElementById('profileEditPopup').style.
 function previewAvatar(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){document.getElementById('avatarPreview').src=ev.target.result;document.getElementById('avatarPreview').style.display='block';};r.readAsDataURL(f);}
 function saveProfileChanges(){let nu=document.getElementById('editUsername').value.trim();if(!nu){document.getElementById('editProfileMsg').innerHTML='<span style="color:#ff6b6b;">❌ Empty</span>';return;}let db=getDB();for(let uid in db.users){if(uid!==currentUser.userId&&db.users[uid].username.toLowerCase()===nu.toLowerCase()){document.getElementById('editProfileMsg').innerHTML='<span style="color:#ff6b6b;">❌ Taken</span>';return;}}let af=document.getElementById('avatarUpload').files[0];if(af){let r=new FileReader();r.onload=function(ev){db.users[currentUser.userId].dp=ev.target.result;db.users[currentUser.userId].username=nu;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();};r.readAsDataURL(af);}else{db.users[currentUser.userId].username=nu;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();}}
 
-// ==================== FOLLOW & SEARCH (FIXED: Username + ID dono se search) ====================
-function searchUser(){
-    let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');
-    if(!q){d.innerHTML='<p style="color:#ff6b6b;">❌ Enter ID or Username</p>';return;}
-    let db=getDB(),f=null;
-    // ID se direct search
-    if(db.users[q])f=db.users[q];
-    else{
-        // Username se search (case-insensitive)
-        for(let uid in db.users){if(db.users[uid].username.toLowerCase()===q.toLowerCase()){f=db.users[uid];break;}}
-    }
-    if(!f){d.innerHTML='<p style="color:#ff9800;">⚠️ User not found</p>';return;}
-    if(f.userId===currentUser.userId){d.innerHTML='<p style="color:#ff9800;">⚠️ This is you</p>';return;}
-    let isF=currentUser.following&&currentUser.following.includes(f.userId);
-    d.innerHTML='<div class="search-user-card"><div style="text-align:center;"><div style="font-size:50px;">👤</div><h3>'+f.username+' '+(f.isAdmin?'👑':'')+' '+(isBanned(f.userId)?'<span style="color:#ff4444;">⛔</span>':'')+'</h3><p>🆔 '+f.userId+'</p><div class="stats-row"><div class="stat-box"><div class="stat-number">'+(f.followers||[]).length+'</div><div class="stat-label">Followers</div></div><div class="stat-box"><div class="stat-number">'+(f.following||[]).length+'</div><div class="stat-label">Following</div></div></div><div style="margin-top:15px;">'+(isF?'<button class="unfollow-btn" onclick="unfollowUser(\''+f.userId+'\')">❌ Unfollow</button><button class="message-btn" onclick="openChat(\''+f.userId+'\')">💬 Message</button>':'<button class="follow-btn" onclick="followUser(\''+f.userId+'\')">✅ Follow</button><p style="font-size:12px;opacity:0.7;">Follow to chat</p>')+'</div></div>';
-}
+// ==================== FOLLOW & SEARCH ====================
+function searchUser(){let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');if(!q){d.innerHTML='<p style="color:#ff6b6b;">❌ Enter ID or Username</p>';return;}let db=getDB(),f=null;if(db.users[q])f=db.users[q];else{for(let uid in db.users){if(db.users[uid].username.toLowerCase()===q.toLowerCase()){f=db.users[uid];break;}}}if(!f){d.innerHTML='<p style="color:#ff9800;">⚠️ User not found</p>';return;}if(f.userId===currentUser.userId){d.innerHTML='<p style="color:#ff9800;">⚠️ This is you</p>';return;}let isF=currentUser.following&&currentUser.following.includes(f.userId);d.innerHTML='<div class="search-user-card"><div style="text-align:center;"><div style="font-size:50px;">👤</div><h3>'+f.username+' '+(f.isAdmin?'👑':'')+' '+(isBanned(f.userId)?'<span style="color:#ff4444;">⛔</span>':'')+'</h3><p>🆔 '+f.userId+'</p><div class="stats-row"><div class="stat-box"><div class="stat-number">'+(f.followers||[]).length+'</div><div class="stat-label">Followers</div></div><div class="stat-box"><div class="stat-number">'+(f.following||[]).length+'</div><div class="stat-label">Following</div></div></div><div style="margin-top:15px;">'+(isF?'<button class="unfollow-btn" onclick="unfollowUser(\''+f.userId+'\')">❌ Unfollow</button><button class="message-btn" onclick="openChat(\''+f.userId+'\')">💬 Message</button>':'<button class="follow-btn" onclick="followUser(\''+f.userId+'\')">✅ Follow</button><p style="font-size:12px;opacity:0.7;">Follow to chat</p>')+'</div></div>';}
 function followUser(uid){let db=getDB();if(!currentUser.following)currentUser.following=[];if(!db.users[uid].followers)db.users[uid].followers=[];if(!currentUser.following.includes(uid))currentUser.following.push(uid);if(!db.users[uid].followers.includes(currentUser.userId))db.users[uid].followers.push(currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
 function unfollowUser(uid){let db=getDB();currentUser.following=(currentUser.following||[]).filter(id=>id!==uid);db.users[uid].followers=(db.users[uid].followers||[]).filter(id=>id!==currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
 
@@ -470,41 +402,37 @@ function banUser(){let uid=document.getElementById('banUserId').value.trim(),hrs
 function unbanUser(){let uid=document.getElementById('unbanUserId').value.trim();if(!uid){document.getElementById('unbanMsg').innerHTML='<span style="color:#ff6b6b;">❌ Enter ID</span>';return;}let db=getDB();if(!db.bans||!db.bans[uid]){document.getElementById('unbanMsg').innerHTML='<span style="color:#ff6b6b;">⚠️ Not banned</span>';return;}delete db.bans[uid];saveDB(db);document.getElementById('unbanMsg').innerHTML='<span style="color:#a8ff78;">✅ Unbanned</span>';loadBannedUsers();}
 function loadBannedUsers(){let db=getDB(),div=document.getElementById('bannedUsersList');if(!db.bans||!Object.keys(db.bans).length){div.innerHTML='<p style="opacity:0.5;">No banned users</p>';return;}let html='',now=Date.now();for(let uid in db.bans){if(db.bans[uid]>now){let u=db.users[uid]||{username:'?'};html+='<div style="padding:5px;background:rgba(255,0,0,0.1);margin:3px 0;border-radius:5px;">🆔 '+uid+' | 👤 '+u.username+' | ⏳ '+formatTime(Math.ceil((db.bans[uid]-now)/1000))+'</div>';}}div.innerHTML=html||'<p style="opacity:0.5;">No active bans</p>';}
 
+// ==================== DELETE USER* ACCOUNTS ====================
+function deleteUserAccounts(){
+    if(!confirm('⚠️ Are you sure? This will DELETE ALL accounts whose username starts with "user" (e.g., user123, user456).\n\nThis CANNOT be undone!'))return;
+    if(!confirm('🚨 FINAL WARNING: Really delete all user* accounts?'))return;
+    let db=getDB();
+    let deletedCount=0;
+    let deletedIds=[];
+    for(let uid in db.users){
+        let u=db.users[uid];
+        if(u.username.toLowerCase().startsWith('user') && !u.isAdmin){
+            deletedIds.push(uid);
+            deletedCount++;
+        }
+    }
+    for(let uid of deletedIds){
+        let u=db.users[uid];
+        if(u.email && db.emails[u.email]) delete db.emails[u.email];
+        delete db.users[uid];
+    }
+    saveDB(db);
+    document.getElementById('deleteMsg').innerHTML='<span style="color:#a8ff78;">✅ Deleted '+deletedCount+' user* accounts!</span>';
+    loadAllUsers();
+}
+
 // ==================== NUMBER SEARCH ====================
 function findValue(obj,keys,d=0){if(!obj||typeof obj!=='object'||d>15)return null;for(let k of keys){if(obj[k]!==undefined&&obj[k]!==null&&obj[k]!==''&&typeof obj[k]!=='object')return obj[k];let lk=k.toLowerCase();for(let ok in obj){if(ok.toLowerCase()===lk&&obj[ok]!==undefined&&obj[ok]!==null&&obj[ok]!==''&&typeof obj[ok]!=='object')return obj[ok];}}for(let ok in obj){if(typeof obj[ok]==='object'&&obj[ok]&&!Array.isArray(obj[ok])){let f=findValue(obj[ok],keys,d+1);if(f)return f;}if(Array.isArray(obj[ok])){for(let it of obj[ok]){if(typeof it==='object'&&it){let f=findValue(it,keys,d+1);if(f)return f;}}}}return null;}
 function extractAllInfo(data){return{phone:findValue(data,['phone','number','mobile']),name:findValue(data,['name','full_name']),fatherName:findValue(data,['father_name','father']),motherName:findValue(data,['mother_name','mother']),address:findValue(data,['address']),city:findValue(data,['city']),state:findValue(data,['state']),sim:findValue(data,['sim','operator','carrier']),email:findValue(data,['email']),aadhar:findValue(data,['aadhar']),pan:findValue(data,['pan']),dob:findValue(data,['dob']),gender:findValue(data,['gender'])};}
-function displayInfo(info,number){
-    let html='<div class="result-card"><h3>📋 NUMBER INFORMATION</h3>';
-    if(info.phone||number)html+='<div class="info-line"><span class="info-icon">📞</span><span class="info-label">PHONE =</span><span class="info-value">'+(info.phone||number)+'</span></div>';
-    if(info.name)html+='<div class="info-line"><span class="info-icon">❤️</span><span class="info-label">NAME =</span><span class="info-value">'+info.name+'</span></div>';
-    if(info.fatherName)html+='<div class="info-line"><span class="info-icon">👨</span><span class="info-label">FATHER =</span><span class="info-value">'+info.fatherName+'</span></div>';
-    if(info.motherName)html+='<div class="info-line"><span class="info-icon">👩</span><span class="info-label">MOTHER =</span><span class="info-value">'+info.motherName+'</span></div>';
-    let addr=[info.address,info.city,info.state].filter(Boolean);
-    if(addr.length)html+='<div class="info-line"><span class="info-icon">📍</span><span class="info-label">ADDRESS =</span><span class="info-value">'+addr.join(', ')+'</span></div>';
-    if(info.sim)html+='<div class="info-line"><span class="info-icon">📡</span><span class="info-label">OPERATOR =</span><span class="info-value">'+info.sim+'</span></div>';
-    if(info.email)html+='<div class="info-line"><span class="info-icon">📧</span><span class="info-label">EMAIL =</span><span class="info-value">'+info.email+'</span></div>';
-    if(info.aadhar)html+='<div class="info-line"><span class="info-icon">🆔</span><span class="info-label">AADHAR =</span><span class="info-value">'+info.aadhar+'</span></div>';
-    html+='<div style="text-align:center;margin-top:10px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open in API</span></div>';
-    html+='<div style="text-align:center;margin-top:10px;"><span class="api-check-badge" onclick="toggleRawData()">📄 API Response</span></div>';
-    html+='<div id="rawJson" class="raw-json"><pre style="background:rgba(0,0,0,0.5);padding:10px;border-radius:10px;font-size:10px;overflow-x:auto;max-height:300px;text-align:left;">'+JSON.stringify(lastRawData,null,2)+'</pre></div></div>';
-    return html;
-}
+function displayInfo(info,number){let html='<div class="result-card"><h3>📋 NUMBER INFORMATION</h3>';if(info.phone||number)html+='<div class="info-line"><span class="info-icon">📞</span><span class="info-label">PHONE =</span><span class="info-value">'+(info.phone||number)+'</span></div>';if(info.name)html+='<div class="info-line"><span class="info-icon">❤️</span><span class="info-label">NAME =</span><span class="info-value">'+info.name+'</span></div>';if(info.fatherName)html+='<div class="info-line"><span class="info-icon">👨</span><span class="info-label">FATHER =</span><span class="info-value">'+info.fatherName+'</span></div>';if(info.motherName)html+='<div class="info-line"><span class="info-icon">👩</span><span class="info-label">MOTHER =</span><span class="info-value">'+info.motherName+'</span></div>';let addr=[info.address,info.city,info.state].filter(Boolean);if(addr.length)html+='<div class="info-line"><span class="info-icon">📍</span><span class="info-label">ADDRESS =</span><span class="info-value">'+addr.join(', ')+'</span></div>';if(info.sim)html+='<div class="info-line"><span class="info-icon">📡</span><span class="info-label">OPERATOR =</span><span class="info-value">'+info.sim+'</span></div>';if(info.email)html+='<div class="info-line"><span class="info-icon">📧</span><span class="info-label">EMAIL =</span><span class="info-value">'+info.email+'</span></div>';if(info.aadhar)html+='<div class="info-line"><span class="info-icon">🆔</span><span class="info-label">AADHAR =</span><span class="info-value">'+info.aadhar+'</span></div>';html+='<div style="text-align:center;margin-top:10px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open in API</span></div>';html+='<div style="text-align:center;margin-top:10px;"><span class="api-check-badge" onclick="toggleRawData()">📄 API Response</span></div>';html+='<div id="rawJson" class="raw-json"><pre style="background:rgba(0,0,0,0.5);padding:10px;border-radius:10px;font-size:10px;overflow-x:auto;max-height:300px;text-align:left;">'+JSON.stringify(lastRawData,null,2)+'</pre></div></div>';return html;}
 function toggleRawData(){let r=document.getElementById('rawJson');if(r)r.classList.toggle('show');}
 function openInAPI(){let n=document.getElementById('phoneNumber').value.trim();if(!n)alert('❌ Enter number');else window.open(API_URL+encodeURIComponent(n),'_blank');}
-async function verifyNumber(){
-    let n=document.getElementById('phoneNumber').value.trim(),rd=document.getElementById('result');
-    if(!n){rd.innerHTML='<div class="result-card" style="color:#ff6b6b;">❌ Enter a number</div>';return;}
-    if(searchCache[n]){rd.innerHTML=displayInfo(searchCache[n].info,n);return;}
-    rd.innerHTML='<div class="result-card"><div class="loading"><div class="spinner"></div><span>Fetching...</span></div></div>';
-    if(currentUser&&!currentUser.isAdmin){let db=getDB();if(db.users[currentUser.userId]&&db.users[currentUser.userId].coins<1){rd.innerHTML='<div class="result-card"><span style="color:#ff6b6b;">❌ No coins!</span><br><button class="buy-btn" onclick="openBuyCoins()">💰 Buy</button></div>';return;}}
-    try{
-        let res=await fetch(API_URL+encodeURIComponent(n));if(!res.ok)throw new Error('HTTP '+res.status);
-        let data=await res.json();lastRawData=data;let info=extractAllInfo(data);
-        searchCache[n]={info:info};
-        if(currentUser&&!currentUser.isAdmin){let db=getDB();db.users[currentUser.userId].coins-=1;saveDB(db);updateUI();}
-        rd.innerHTML=displayInfo(info,n);
-    }catch(err){rd.innerHTML='<div class="result-card"><h3 style="color:#ff9800;">⚠️ API Issue</h3><p>'+err.message+'</p><button onclick="verifyNumber()">🔄 Retry</button></div>';}
-}
+async function verifyNumber(){let n=document.getElementById('phoneNumber').value.trim(),rd=document.getElementById('result');if(!n){rd.innerHTML='<div class="result-card" style="color:#ff6b6b;">❌ Enter a number</div>';return;}if(searchCache[n]){rd.innerHTML=displayInfo(searchCache[n].info,n);return;}rd.innerHTML='<div class="result-card"><div class="loading"><div class="spinner"></div><span>Fetching...</span></div></div>';if(currentUser&&!currentUser.isAdmin){let db=getDB();if(db.users[currentUser.userId]&&db.users[currentUser.userId].coins<1){rd.innerHTML='<div class="result-card"><span style="color:#ff6b6b;">❌ No coins!</span><br><button class="buy-btn" onclick="openBuyCoins()">💰 Buy</button></div>';return;}}try{let res=await fetch(API_URL+encodeURIComponent(n));if(!res.ok)throw new Error('HTTP '+res.status);let data=await res.json();lastRawData=data;let info=extractAllInfo(data);searchCache[n]={info:info};if(currentUser&&!currentUser.isAdmin){let db=getDB();db.users[currentUser.userId].coins-=1;saveDB(db);updateUI();}rd.innerHTML=displayInfo(info,n);}catch(err){rd.innerHTML='<div class="result-card"><h3 style="color:#ff9800;">⚠️ API Issue</h3><p>'+err.message+'</p><button onclick="verifyNumber()">🔄 Retry</button></div>';}}
 
 // ==================== AUTO LOGIN ====================
 function checkAutoLogin(){let uid=getValidSession();if(uid){autoLogin(uid);}else{document.getElementById('authSection').style.display='block';showLoginForm();}}
@@ -515,9 +443,7 @@ document.getElementById('phoneNumber')?.addEventListener('keypress',e=>{if(e.key
 document.addEventListener('keydown',e=>{if((e.key==='m'||e.key==='M')&&!e.target.matches('input'))toggleMusic();});
 
 // ==================== INIT ====================
-window.addEventListener('load',()=>{
-    loadBackground();changeTheme(currentTheme);bgMusic.volume=document.getElementById('volumeSlider').value/100;checkAutoLogin();startMatrix();
-});
+window.addEventListener('load',()=>{loadBackground();changeTheme(currentTheme);bgMusic.volume=document.getElementById('volumeSlider').value/100;checkAutoLogin();startMatrix();});
 </script>
 </body>
 </html>
