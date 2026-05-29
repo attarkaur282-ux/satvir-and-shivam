@@ -130,6 +130,591 @@ button:hover{transform:translateY(-2px)}
 .ban-screen .avatar-large{margin-bottom:20px}
 .ban-title{color:#ff4444;font-size:24px;font-weight:bold;margin:15px 0;text-shadow:0 0 10px rgba(255,0,0,0.5)}
 .ban-timer-large{font-size:32px;font-weight:bold;color:#ffaa00;margin:20px 0;font-family:monospace}
+/* Remember me */
+.remember-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    font-size: 14px;
+}
+.remember-row input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    accent-color: #00ff00;
+}
+</style>
+</head>
+<body class="theme-hacker">
+
+<div class="bg-container" id="bgContainer">
+    <img id="bgImage" src="https://image-link.edgeone.app/1780034388606-2p82ld.jpg" alt="Background" crossorigin="anonymous">
+</div>
+
+<!-- SCAN LINE -->
+<div class="scan-line"></div>
+
+<!-- MATRIX CANVAS -->
+<canvas id="matrixCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.1;"></canvas>
+
+<!-- THEME SWITCHER -->
+<div class="theme-switcher" onclick="toggleThemeMenu()">🎨</div>
+<div class="theme-menu" id="themeMenu">
+    <div class="theme-option active" onclick="changeTheme('hacker')"><span class="theme-color-preview" style="background:#00ff00;"></span>💻 Hacker</div>
+    <div class="theme-option" onclick="changeTheme('cyberpunk')"><span class="theme-color-preview" style="background:#ff00ff;"></span>🌆 Cyberpunk</div>
+    <div class="theme-option" onclick="changeTheme('neon')"><span class="theme-color-preview" style="background:#00ffff;"></span>💠 Neon</div>
+    <div class="theme-option" onclick="changeTheme('gold')"><span class="theme-color-preview" style="background:#ffd700;"></span>👑 Gold</div>
+    <div class="theme-option" onclick="changeTheme('matrix')"><span class="theme-color-preview" style="background:#00ff41;"></span>🟢 Matrix</div>
+</div>
+
+<!-- MUSIC PLAYER -->
+<div class="music-player" id="musicPlayer">
+    <button class="music-btn" onclick="toggleMusic()" id="musicToggleBtn">▶️</button>
+    <div class="music-info" id="musicInfo">No Music</div>
+    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume(this.value)">
+    <button class="music-btn" onclick="nextTrack()" style="font-size:18px;">⏭️</button>
+</div>
+<audio id="bgMusic" loop style="display:none;"></audio>
+
+<!-- BANNER POPUP -->
+<div class="popup-overlay" id="bannerPopup">
+    <div class="popup-content">
+        <div class="popup-banner-container" id="bannerContainer"></div>
+        <h2 class="popup-title">🔥 Number Info PRO</h2>
+        <p class="popup-subtitle">Complete Phone Number OSINT Intelligence Tool</p>
+        <button class="popup-btn" onclick="closeBannerPopup()">👇 Tap to Continue 👇</button>
+    </div>
+</div>
+
+<div class="container">
+    <!-- AUTH SECTION -->
+    <div id="authSection" class="card">
+        <h1 class="terminal-cursor">🔐 Number Info PRO</h1>
+        <div class="subtitle" id="authSubtitle">Login or Sign Up to continue</div>
+        <div class="auth-toggle">
+            <button class="active" onclick="showLoginForm()">🔑 Login</button>
+            <button onclick="showSignupForm()">📝 Sign Up</button>
+        </div>
+        <div id="loginForm">
+            <input type="text" id="loginUsername" placeholder="Username or Email" autocomplete="off">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <div class="remember-row">
+                <input type="checkbox" id="rememberMe"> <label for="rememberMe">Stay logged in for 7 days</label>
+            </div>
+            <button onclick="handleLogin()">🚀 Login</button>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+        <div id="signupForm" style="display:none;">
+            <input type="email" id="signupEmail" placeholder="Email Address" autocomplete="off">
+            <input type="text" id="signupUsername" placeholder="Username" autocomplete="off">
+            <input type="password" id="signupPassword" placeholder="Create Password">
+            <input type="password" id="signupConfirmPassword" placeholder="Confirm Password">
+            <button onclick="handleSignup()">📝 Sign Up</button>
+            <div id="signupError" class="error-msg"></div>
+            <div id="signupSuccess" class="success-msg"></div>
+        </div>
+        <div class="cred-info">🔒 Secure Login Portal</div>
+    </div>
+
+    <!-- BAN SCREEN -->
+    <div id="banSection" class="card" style="display:none;">
+        <div class="ban-screen">
+            <img id="banAvatar" class="avatar-large" src="" alt="User Avatar" style="display:none;">
+            <div id="banDefaultAvatar" style="font-size:80px;">👤</div>
+            <h2 id="banUsername" style="color:#ff4444;"></h2>
+            <div class="ban-title">⛔ YOU HAVE BEEN BANNED</div>
+            <p style="opacity:0.8;">Your account is temporarily suspended.</p>
+            <div class="ban-timer-large" id="banTimer">00:00:00</div>
+            <p style="font-size:12px;opacity:0.6;">You will be automatically unbanned after the timer ends.</p>
+        </div>
+    </div>
+
+    <!-- APP SECTION -->
+    <div id="appSection" style="display:none;">
+        <div class="card">
+            <div id="userBadge" class="user-badge"></div>
+            <div class="coin-display">
+                <span class="coin-icon">🪙</span><span id="coinCount">50</span> Coins
+                <button class="buy-btn" onclick="openBuyCoins()">💰 Buy</button>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('search')">🔍 Search</button>
+                <button class="nav-tab" onclick="switchTab('findUser')">👥 Find User</button>
+                <button class="nav-tab" onclick="switchTab('chats')">💬 Chats</button>
+                <button class="nav-tab" onclick="switchTab('profile')">👤 Profile</button>
+            </div>
+            <div id="tab-search">
+                <h1 class="terminal-cursor">📱 Number Info PRO</h1>
+                <div class="subtitle">Complete Phone Number Intelligence</div>
+                <input type="tel" id="phoneNumber" placeholder="Enter phone number (e.g., +919876543210)" autocomplete="off">
+                <div class="button-group">
+                    <button onclick="verifyNumber()">🔍 Search (1 Coin)</button>
+                </div>
+                <div id="result"><div class="result-card" style="text-align:center;opacity:0.7;">✨ Enter a number to get details</div></div>
+            </div>
+            <div id="tab-findUser" style="display:none;">
+                <h3 style="text-align:center;">👥 Find User</h3>
+                <input type="text" id="searchUserInput" placeholder="Enter User ID or Username">
+                <button onclick="searchUser()">🔍 Search User</button>
+                <div id="userSearchResult"></div>
+            </div>
+            <div id="tab-chats" style="display:none;">
+                <h3 style="text-align:center;">💬 Your Conversations</h3>
+                <div id="chatList"></div>
+            </div>
+            <div id="tab-profile" style="display:none;">
+                <h3 style="text-align:center;">👤 Your Profile</h3>
+                <div id="profileInfo"></div>
+                <div class="profile-edit-area">
+                    <button onclick="openProfileEditor()">✏️ Edit Profile</button>
+                </div>
+            </div>
+            <div id="adminPanel" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.2);">
+                <h3>⚙️ Admin Controls</h3>
+                <h4 style="color:gold;">💰 Send Coins</h4>
+                <input type="text" id="recipientUserId" placeholder="User ID"><input type="number" id="coinAmount" placeholder="Coin Amount" min="1">
+                <button onclick="adminSendCoins()">💎 Send Coins</button><div id="adminCoinMsg"></div>
+                <h4 style="color:gold;margin-top:15px;">🚫 Ban User</h4>
+                <input type="text" id="banUserId" placeholder="User ID to ban">
+                <input type="number" id="banDuration" placeholder="Duration (hours)" min="1" value="24">
+                <button onclick="banUser()" style="background:#ff4444;border-color:#ff4444;color:#fff;">🔨 Ban User</button>
+                <div id="banMsg"></div>
+                <h4 style="color:gold;margin-top:15px;">🔓 Unban User</h4>
+                <input type="text" id="unbanUserId" placeholder="User ID to unban">
+                <button onclick="unbanUser()">✅ Unban User</button>
+                <div id="unbanMsg"></div>
+                <h4 style="color:gold;margin-top:15px;">📋 Banned Users</h4>
+                <div id="bannedUsersList" style="max-height:200px;overflow-y:auto;"></div>
+                <h4 style="color:gold;margin-top:15px;">👥 All Users</h4><div id="allUsersList" style="max-height:300px;overflow-y:auto;"></div>
+                <h4 style="color:gold;margin-top:15px;">🖼️ Background</h4>
+                <input type="text" id="posterUrl" placeholder="New Background Image URL"><button onclick="updateBackground()">💾 Update</button><div id="adminMsg"></div>
+            </div>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+</div>
+
+<!-- BUY COINS POPUP -->
+<div class="popup-overlay" id="buyCoinsPopup" style="display:none;">
+    <div class="popup-content">
+        <h3>💰 Buy Coins</h3><p>Scan QR Code to Pay</p>
+        <img src="https://image-link.edgeone.app/1780049055586-zxq5eq.jpg" alt="QR" style="width:200px;height:200px;margin:10px auto;display:block;border-radius:15px;border:3px solid gold;">
+        <p style="font-size:12px;">After payment, upload screenshot</p>
+        <input type="file" id="screenshotUpload" accept="image/*" onchange="handleScreenshotUpload(event)">
+        <div id="uploadPreview"></div>
+        <div id="verificationProgress" style="display:none;width:100%;height:5px;background:rgba(255,255,255,0.2);border-radius:10px;margin:10px 0;"><div id="progressBar" style="height:100%;background:#4CAF50;width:0%;border-radius:10px;"></div></div>
+        <p id="verificationStatus"></p>
+        <button class="popup-btn" onclick="closeBuyCoins()">❌ Close</button>
+    </div>
+</div>
+
+<!-- PROFILE EDIT POPUP -->
+<div class="popup-overlay" id="profileEditPopup" style="display:none;">
+    <div class="popup-content">
+        <h3>✏️ Edit Profile</h3>
+        <div style="margin:10px 0;">
+            <label>Profile Picture</label>
+            <input type="file" id="avatarUpload" accept="image/*" onchange="previewAvatar(event)">
+            <img id="avatarPreview" class="avatar-large" src="" alt="Preview" style="display:none;">
+        </div>
+        <input type="text" id="editUsername" placeholder="New Username">
+        <button onclick="saveProfileChanges()">💾 Save Changes</button>
+        <p id="editProfileMsg"></p>
+        <button class="popup-btn" onclick="closeProfileEditor()">❌ Cancel</button>
+    </div>
+</div>
+
+<!-- CHAT POPUP -->
+<div class="popup-overlay" id="chatPopup" style="display:none;">
+    <div class="popup-content" style="max-width:500px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <h3 id="chatPartnerName">Chat</h3>
+            <button class="popup-btn" onclick="closeChat()" style="background:#dc3545;margin:0;">❌</button>
+        </div>
+        <div class="chat-container" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chatMessageInput" placeholder="Type message..." onkeypress="if(event.key==='Enter')sendChatMsg()">
+            <button id="sendMsgBtn" onclick="sendChatMsg()">📤 Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== THEME ==========
+let currentTheme=localStorage.getItem('selectedTheme')||'hacker';
+function changeTheme(t){currentTheme=t;localStorage.setItem('selectedTheme',t);document.body.className='';document.body.classList.add('theme-'+t);document.querySelectorAll('.theme-option').forEach(o=>o.classList.remove('active'));event.target.closest('.theme-option').classList.add('active');document.getElementById('themeMenu').classList.remove('show');if(t==='hacker'||t==='matrix')startMatrix();else stopMatrix();}
+function toggleThemeMenu(){document.getElementById('themeMenu').classList.toggle('show');}
+document.addEventListener('click',function(e){if(!e.target.closest('.theme-switcher')&&!e.target.closest('.theme-menu'))document.getElementById('themeMenu').classList.remove('show');});
+
+// ========== MATRIX ==========
+let matrixInterval;const mCanvas=document.getElementById('matrixCanvas'),mCtx=mCanvas.getContext('2d');
+function initMatrix(){mCanvas.width=window.innerWidth;mCanvas.height=window.innerHeight;}
+function startMatrix(){initMatrix();const c='アイウエオカキクケコサシスセソタチツテト0123456789',fs=14,cols=mCanvas.width/fs,drops=Array(Math.floor(cols)).fill(1);if(matrixInterval)clearInterval(matrixInterval);matrixInterval=setInterval(()=>{mCtx.fillStyle='rgba(0,0,0,0.05)';mCtx.fillRect(0,0,mCanvas.width,mCanvas.height);mCtx.fillStyle=currentTheme==='hacker'?'#0F0':'#00ff41';mCtx.font=fs+'px monospace';for(let i=0;i<drops.length;i++){mCtx.fillText(c[Math.floor(Math.random()*c.length)],i*fs,drops[i]*fs);if(drops[i]*fs>mCanvas.height&&Math.random()>0.975)drops[i]=0;drops[i]++;}},50);}
+function stopMatrix(){if(matrixInterval){clearInterval(matrixInterval);matrixInterval=null;}mCtx.clearRect(0,0,mCanvas.width,mCanvas.height);}
+window.addEventListener('resize',()=>{if(currentTheme==='hacker'||currentTheme==='matrix')initMatrix();});
+
+// ========== MUSIC ==========
+const tracks=[{name:'Hacker Beat',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},{name:'Cyberpunk',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},{name:'Dark Synth',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},{name:'Neon Nights',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'},{name:'Matrix',url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'}];
+let cTrack=0,isPlaying=false;const bgMusic=document.getElementById('bgMusic');
+function loadTrack(i){cTrack=i;bgMusic.src=tracks[i].url;document.getElementById('musicInfo').textContent=tracks[i].name;if(isPlaying)bgMusic.play().catch(()=>{});}
+function toggleMusic(){if(isPlaying){bgMusic.pause();document.getElementById('musicToggleBtn').textContent='▶️';isPlaying=false;}else{if(!bgMusic.src||bgMusic.src===location.href)loadTrack(0);bgMusic.play().then(()=>{document.getElementById('musicToggleBtn').textContent='⏸️';isPlaying=true;}).catch(()=>alert('Click anywhere first'));}}
+function nextTrack(){loadTrack((cTrack+1)%tracks.length);if(isPlaying)bgMusic.play().catch(()=>{});}
+function changeVolume(v){bgMusic.volume=v/100;}
+document.addEventListener('click',function initAudio(){if(!isPlaying&&bgMusic.src&&bgMusic.src!==location.href){bgMusic.play().then(()=>{document.getElementById('musicToggleBtn').textContent='⏸️';isPlaying=true;}).catch(()=>{});}},{once:true});
+
+// ========== DATABASE ==========
+function getDB(){let db=localStorage.getItem('numberInfoDB');if(!db){db={users:{"1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:[],following:[],isAdmin:true,createdAt:new Date().toISOString(),dp:""},"11111111":{userId:"11111111",email:"demo@test.com",username:"demo",password:"demo123",coins:50,followers:["11111112"],following:["11111112"],createdAt:new Date().toISOString(),dp:""},"11111112":{userId:"11111112",email:"test@test.com",username:"testuser",password:"test123",coins:50,followers:["11111111"],following:["11111111"],createdAt:new Date().toISOString(),dp:""}},userIdCounter:11111112,emails:{"admin@pro.com":"1","demo@test.com":"11111111","test@test.com":"11111112"},messages:{},chats:{},bans:{}};saveDB(db);}return JSON.parse(localStorage.getItem('numberInfoDB'));}
+function saveDB(db){localStorage.setItem('numberInfoDB',JSON.stringify(db));}
+let currentUser=null,currentChatPartner=null,chatRefreshInterval=null,lastRawData=null;
+const API_URL="https://pawan-osint.vercel.app/api?apikey=toxicadminn&number=",DEFAULT_BG="https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
+const searchCache={};
+let banTimerInterval=null;
+
+// ========== SESSION MANAGEMENT (7 days remember me) ==========
+function saveSession(userId){
+    const session = { userId: userId, expires: Date.now() + 7*24*60*60*1000 };
+    localStorage.setItem('sessionToken', JSON.stringify(session));
+}
+function clearSession(){
+    localStorage.removeItem('sessionToken');
+}
+function getValidSession(){
+    const token = localStorage.getItem('sessionToken');
+    if(!token) return null;
+    try{
+        const session = JSON.parse(token);
+        if(session.expires && Date.now() < session.expires){
+            return session.userId;
+        } else {
+            clearSession();
+            return null;
+        }
+    }catch(e){
+        clearSession();
+        return null;
+    }
+}
+
+// ========== BAN UTILS ==========
+function isBanned(userId){let db=getDB();if(!db.bans||!db.bans[userId])return false;let unbanTime=db.bans[userId];if(Date.now()>=unbanTime){delete db.bans[userId];saveDB(db);return false;}return true;}
+function getBanRemaining(userId){let db=getDB();if(!db.bans||!db.bans[userId])return 0;let remain=db.bans[userId]-Date.now();return remain>0?Math.ceil(remain/1000):0;}
+function formatTime(seconds){if(seconds<=0)return "00:00:00";let h=Math.floor(seconds/3600),m=Math.floor((seconds%3600)/60),s=seconds%60;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+
+function showBanScreen(user){
+    document.getElementById('authSection').style.display='none';
+    document.getElementById('appSection').style.display='none';
+    document.getElementById('banSection').style.display='block';
+    document.getElementById('banUsername').innerText=user.username;
+    let avatar=document.getElementById('banAvatar');
+    let defaultAvatar=document.getElementById('banDefaultAvatar');
+    if(user.dp){
+        avatar.src=user.dp;
+        avatar.style.display='block';
+        defaultAvatar.style.display='none';
+    }else{
+        avatar.style.display='none';
+        defaultAvatar.style.display='block';
+    }
+    updateBanTimer(user.userId);
+    if(banTimerInterval)clearInterval(banTimerInterval);
+    banTimerInterval=setInterval(()=>updateBanTimer(user.userId),1000);
+}
+
+function updateBanTimer(userId){
+    let remain=getBanRemaining(userId);
+    document.getElementById('banTimer').innerText=formatTime(remain);
+    if(remain<=0){
+        clearInterval(banTimerInterval);
+        banTimerInterval=null;
+        let db=getDB();
+        if(db.bans&&db.bans[userId])delete db.bans[userId];
+        saveDB(db);
+        document.getElementById('banSection').style.display='none';
+        document.getElementById('authSection').style.display='block';
+        showLoginForm();
+        document.getElementById('loginError').innerHTML='<span style="color:#a8ff78;">✅ Ban expired! You can login now.</span>';
+    }
+}
+
+function hideBanScreen(){
+    document.getElementById('banSection').style.display='none';
+    if(banTimerInterval){clearInterval(banTimerInterval);banTimerInterval=null;}
+}
+
+// ========== POPUP ==========
+function loadBanner(u){let c=document.getElementById('bannerContainer');c.innerHTML='';let img=document.createElement('img');img.className='popup-banner';img.alt='Banner';img.onload=function(){c.appendChild(img);};img.onerror=function(){c.innerHTML='<div style="padding:40px;color:#ff9800;">🖼️ Banner</div>';};img.src=u;}
+function closeBannerPopup(){document.getElementById('bannerPopup').style.display='none';}
+function loadBackground(){let s=localStorage.getItem("global_background_url"),bg=s||DEFAULT_BG;document.getElementById("bgImage").src=bg;loadBanner(bg);if(!s)localStorage.setItem("global_background_url",DEFAULT_BG);}
+function updateBackground(){let u=document.getElementById('posterUrl').value.trim();if(!u){document.getElementById('adminMsg').innerHTML='<span class="error-msg">❌ Enter URL</span>';return;}localStorage.setItem("global_background_url",u);document.getElementById("bgImage").src=u;loadBanner(u);document.getElementById('adminMsg').innerHTML='<span class="success-msg">✅ Updated!</span>';document.getElementById('posterUrl').value='';setTimeout(()=>{document.getElementById('adminMsg').innerHTML='';},3000);}
+
+// ========== AUTH ==========
+function showLoginForm(){document.getElementById('loginForm').style.display='block';document.getElementById('signupForm').style.display='none';document.querySelectorAll('.auth-toggle button')[0].classList.add('active');document.querySelectorAll('.auth-toggle button')[1].classList.remove('active');}
+function showSignupForm(){document.getElementById('loginForm').style.display='none';document.getElementById('signupForm').style.display='block';document.querySelectorAll('.auth-toggle button')[0].classList.remove('active');document.querySelectorAll('.auth-toggle button')[1].classList.add('active');}
+function handleSignup(){let em=document.getElementById('signupEmail').value.trim().toLowerCase(),un=document.getElementById('signupUsername').value.trim(),pw=document.getElementById('signupPassword').value,cp=document.getElementById('signupConfirmPassword').value;document.getElementById('signupError').innerHTML='';document.getElementById('signupSuccess').innerHTML='';if(!em||!un||!pw||!cp){document.getElementById('signupError').innerHTML='❌ All fields required';return;}if(!em.includes('@')||!em.includes('.')){document.getElementById('signupError').innerHTML='❌ Invalid email';return;}if(pw!==cp){document.getElementById('signupError').innerHTML='❌ Passwords mismatch';return;}if(pw.length<4){document.getElementById('signupError').innerHTML='❌ Min 4 chars';return;}let db=getDB();if(db.emails[em]){document.getElementById('signupError').innerHTML='❌ Email already registered!';return;}for(let uid in db.users){if(db.users[uid].username.toLowerCase()===un.toLowerCase()){document.getElementById('signupError').innerHTML='❌ Username taken';return;}}db.userIdCounter++;db.users[db.userIdCounter.toString()]={userId:db.userIdCounter.toString(),email:em,username:un,password:pw,coins:50,followers:[],following:[],createdAt:new Date().toISOString(),dp:""};db.emails[em]=db.userIdCounter.toString();saveDB(db);document.getElementById('signupSuccess').innerHTML=`✅ Created! ID: <strong>${db.userIdCounter}</strong>`;['signupEmail','signupUsername','signupPassword','signupConfirmPassword'].forEach(id=>document.getElementById(id).value='');setTimeout(()=>{showLoginForm();document.getElementById('loginUsername').value=un;},2000);}
+function handleLogin(){
+    let un=document.getElementById('loginUsername').value.trim(),pw=document.getElementById('loginPassword').value.trim();
+    document.getElementById('loginError').innerHTML='';
+    if(!un||!pw){document.getElementById('loginError').innerHTML='❌ Enter credentials';return;}
+    let db=getDB();
+    // admin bypass
+    if(un==='index.india'&&pw==='index.india'){
+        currentUser=db.users["1"];
+        if(document.getElementById('rememberMe').checked) saveSession("1");
+        showApp();
+        return;
+    }
+    if(un.includes('@')){
+        let uid=db.emails[un.toLowerCase()];
+        if(uid&&db.users[uid]&&db.users[uid].password===pw){
+            if(isBanned(uid)){showBanScreen(db.users[uid]);return;}
+            currentUser=db.users[uid];
+            if(document.getElementById('rememberMe').checked) saveSession(uid);
+            showApp();
+            return;
+        }
+    }
+    for(let uid in db.users){
+        if(db.users[uid].username===un&&db.users[uid].password===pw){
+            if(isBanned(uid)){showBanScreen(db.users[uid]);return;}
+            currentUser=db.users[uid];
+            if(document.getElementById('rememberMe').checked) saveSession(uid);
+            showApp();
+            return;
+        }
+    }
+    document.getElementById('loginError').innerHTML='❌ Invalid credentials';
+}
+function autoLogin(userId){
+    let db=getDB();
+    let user = db.users[userId];
+    if(!user) return false;
+    if(isBanned(userId)){
+        showBanScreen(user);
+        return true; // ban screen shown
+    }
+    currentUser=user;
+    showApp();
+    return true;
+}
+function showApp(){
+    hideBanScreen();
+    document.getElementById('authSection').style.display='none';
+    document.getElementById('appSection').style.display='block';
+    updateUI();
+    startChatRefresh();
+}
+function logout(){
+    stopChatRefresh();
+    currentUser=null;
+    currentChatPartner=null;
+    hideBanScreen();
+    clearSession(); // remove remember me
+    document.getElementById('authSection').style.display='block';
+    document.getElementById('appSection').style.display='none';
+    document.getElementById('loginUsername').value='';
+    document.getElementById('loginPassword').value='';
+    document.getElementById('phoneNumber').value='';
+    document.getElementById('result').innerHTML='<div class="result-card" style="text-align:center;opacity:0.7;">✨ Enter a number to get details</div>';
+    showLoginForm();
+}
+
+// ========== UI ==========
+function updateUI(){if(!currentUser)return;let db=getDB();let user=db.users[currentUser.userId]||currentUser;let avatarHtml=user.dp?`<img src="${user.dp}" class="avatar-small">`:'';
+document.getElementById('userBadge').innerHTML=`${avatarHtml} ✅ <strong>${user.username}</strong> | 🆔 <strong>${user.userId}</strong> ${user.isAdmin?'| 👑 ADMIN':''}`;
+let coins=user.isAdmin?999999:(user.coins||0);document.getElementById('coinCount').innerText=coins;currentUser=user;
+if(user.isAdmin){document.getElementById('adminPanel').style.display='block';loadAllUsers();loadBannedUsers();}
+loadProfile();loadChatList();}
+function switchTab(t){document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));event.target.classList.add('active');['search','findUser','chats','profile'].forEach(x=>document.getElementById('tab-'+x).style.display=x===t?'block':'none');if(t==='chats')loadChatList();if(t==='profile')loadProfile();}
+function loadProfile(){if(!currentUser||currentUser.isAdmin)return;let db=getDB(),u=db.users[currentUser.userId];if(!u)return;let avatar=u.dp?`<img src="${u.dp}" class="avatar-large">`:'<div style="font-size:50px;">👤</div>';
+document.getElementById('profileInfo').innerHTML=`<div style="text-align:center;">${avatar}<h3>${u.username}</h3><p>🆔 ${u.userId}</p><p>📧 ${u.email}</p><div class="stats-row"><div class="stat-box"><div class="stat-number">${(u.followers||[]).length}</div><div class="stat-label">Followers</div></div><div class="stat-box"><div class="stat-number">${(u.following||[]).length}</div><div class="stat-label">Following</div></div><div class="stat-box"><div class="stat-number">🪙 ${u.coins}</div><div class="stat-label">Coins</div></div></div></div>`;}
+
+// ========== PROFILE EDIT ==========
+function openProfileEditor(){if(!currentUser||currentUser.isAdmin)return;document.getElementById('profileEditPopup').style.display='flex';
+document.getElementById('editUsername').value=currentUser.username;
+let av=document.getElementById('avatarPreview');if(currentUser.dp){av.src=currentUser.dp;av.style.display='block';}else av.style.display='none';
+document.getElementById('editProfileMsg').innerHTML='';}
+function closeProfileEditor(){document.getElementById('profileEditPopup').style.display='none';}
+function previewAvatar(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){let p=document.getElementById('avatarPreview');p.src=ev.target.result;p.style.display='block';};r.readAsDataURL(f);}
+function saveProfileChanges(){let newUn=document.getElementById('editUsername').value.trim();if(!newUn){document.getElementById('editProfileMsg').innerHTML='<span style="color:#ff6b6b;">❌ Username empty</span>';return;}let db=getDB();for(let uid in db.users){if(uid!==currentUser.userId&&db.users[uid].username.toLowerCase()===newUn.toLowerCase()){document.getElementById('editProfileMsg').innerHTML='<span style="color:#ff6b6b;">❌ Username taken</span>';return;}}let af=document.getElementById('avatarUpload').files[0];if(af){let r=new FileReader();r.onload=function(ev){db.users[currentUser.userId].dp=ev.target.result;db.users[currentUser.userId].username=newUn;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();};r.readAsDataURL(af);}else{db.users[currentUser.userId].username=newUn;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();}}
+
+// ========== FOLLOW & SEARCH ==========
+function searchUser(){let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');if(!q){d.innerHTML='<p style="color:#ff6b6b;text-align:center;">❌ Enter ID/Username</p>';return;}let db=getDB(),f=null;if(db.users[q])f=db.users[q];else{for(let uid in db.users){if(db.users[uid].username.toLowerCase()===q.toLowerCase()){f=db.users[uid];break;}}}if(!f){d.innerHTML='<p style="color:#ff9800;text-align:center;">⚠️ Not found</p>';return;}if(f.userId===currentUser.userId){d.innerHTML='<p style="color:#ff9800;text-align:center;">⚠️ This is you</p>';return;}let isF=currentUser.following&&currentUser.following.includes(f.userId);d.innerHTML=`<div class="search-user-card"><div style="text-align:center;"><div style="font-size:50px;">👤</div><h3>${f.username} ${f.isAdmin?'👑':''} ${isBanned(f.userId)?'<span class="ban-timer">⛔ BANNED</span>':''}</h3><p>🆔 ${f.userId}</p><div class="stats-row"><div class="stat-box"><div class="stat-number">${(f.followers||[]).length}</div><div class="stat-label">Followers</div></div><div class="stat-box"><div class="stat-number">${(f.following||[]).length}</div><div class="stat-label">Following</div></div></div><div style="margin-top:15px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">${isF?`<button class="unfollow-btn" onclick="unfollowUser('${f.userId}')">❌ Unfollow</button><button class="message-btn" onclick="openChat('${f.userId}')">💬 Message</button>`:`<button class="follow-btn" onclick="followUser('${f.userId}')">✅ Follow</button><p style="font-size:12px;opacity:0.7;">Follow to chat</p>`}</div></div></div>`;}
+function followUser(uid){let db=getDB();if(!currentUser.following)currentUser.following=[];if(!db.users[uid].followers)db.users[uid].followers=[];if(!currentUser.following.includes(uid))currentUser.following.push(uid);if(!db.users[uid].followers.includes(currentUser.userId))db.users[uid].followers.push(currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
+function unfollowUser(uid){let db=getDB();currentUser.following=(currentUser.following||[]).filter(id=>id!==uid);db.users[uid].followers=(db.users[uid].followers||[]).filter(id=>id!==currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
+
+// ========== CHAT ==========
+function startChatRefresh(){if(chatRefreshInterval)clearInterval(chatRefreshInterval);chatRefreshInterval=setInterval(()=>{if(currentChatPartner)loadChatMessages();else loadChatList();},1000);}
+function stopChatRefresh(){if(chatRefreshInterval){clearInterval(chatRefreshInterval);chatRefreshInterval=null;}}
+function openChat(uid){let db=getDB();if(!currentUser.following||!currentUser.following.includes(uid)){alert('❌ Follow first!');return;}if(isBanned(uid)){alert('⛔ User is banned, cannot chat.');return;}currentChatPartner=uid;document.getElementById('chatPartnerName').innerText=`💬 ${db.users[uid].username}`;document.getElementById('chatPopup').style.display='flex';loadChatMessages();setTimeout(()=>{document.getElementById('chatMessageInput').focus();},100);}
+function closeChat(){currentChatPartner=null;document.getElementById('chatPopup').style.display='none';document.getElementById('chatMessages').innerHTML='';}
+function loadChatMessages(){if(!currentChatPartner)return;let db=getDB(),ck=[currentUser.userId,currentChatPartner].sort().join('_'),msgs=db.messages[ck]||[],html='';msgs.forEach(m=>{html+=`<div class="chat-message ${m.sender===currentUser.userId?'sent':'received'}"><div>${m.text}</div><div class="chat-time">${new Date(m.time).toLocaleTimeString()}</div></div>`;});if(!msgs.length)html='<p style="text-align:center;opacity:0.7;">No messages yet 👋</p>';document.getElementById('chatMessages').innerHTML=html;document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;}
+function sendChatMsg(){let inp=document.getElementById('chatMessageInput');let txt=inp.value.trim();if(!txt||!currentChatPartner)return;let db=getDB();let ck=[currentUser.userId,currentChatPartner].sort().join('_');if(!db.messages[ck])db.messages[ck]=[];db.messages[ck].push({sender:currentUser.userId,text:txt,time:new Date().toISOString()});if(!db.chats[currentUser.userId])db.chats[currentUser.userId]=[];if(!db.chats[currentUser.userId].includes(currentChatPartner))db.chats[currentUser.userId].push(currentChatPartner);if(!db.chats[currentChatPartner])db.chats[currentChatPartner]=[];if(!db.chats[currentChatPartner].includes(currentUser.userId))db.chats[currentChatPartner].push(currentUser.userId);saveDB(db);inp.value='';loadChatMessages();inp.focus();}
+function loadChatList(){let db=getDB(),chats=db.chats[currentUser.userId]||[],html='';if(!chats.length)html='<p style="text-align:center;opacity:0.7;">No conversations</p>';else chats.forEach(pid=>{if(db.users[pid]){let ck=[currentUser.userId,pid].sort().join('_'),msgs=db.messages[ck]||[],last=msgs.length?msgs[msgs.length-1].text.substring(0,30):'No messages';html+=`<div class="search-user-card" onclick="openChat('${pid}')"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:30px;">👤</span><div style="flex:1;"><strong>${db.users[pid].username} ${isBanned(pid)?'<span class="ban-timer">⛔</span>':''}</strong><p style="font-size:12px;opacity:0.7;">${last}...</p></div><span>💬</span></div></div>`;}});document.getElementById('chatList').innerHTML=html;}
+
+// ========== COINS ==========
+function openBuyCoins(){document.getElementById('buyCoinsPopup').style.display='flex';document.getElementById('uploadPreview').innerHTML='';document.getElementById('verificationStatus').innerHTML='';document.getElementById('verificationProgress').style.display='none';document.getElementById('screenshotUpload').value='';}
+function closeBuyCoins(){document.getElementById('buyCoinsPopup').style.display='none';updateUI();}
+function handleScreenshotUpload(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){document.getElementById('uploadPreview').innerHTML=`<img src="${ev.target.result}" style="width:100px;height:100px;border-radius:10px;border:2px solid gold;"><p style="color:#a8ff78;">✅ Uploaded!</p>`;startVerification();};r.readAsDataURL(f);}
+function startVerification(){let pb=document.getElementById('progressBar'),pd=document.getElementById('verificationProgress'),st=document.getElementById('verificationStatus');pd.style.display='block';pb.style.width='0%';st.innerHTML='🔄 Verifying...';let p=0,iv=setInterval(()=>{p+=20;pb.style.width=p+'%';if(p>=100){clearInterval(iv);st.innerHTML='✅ Verified! +50 Coins!';if(currentUser&&!currentUser.isAdmin){let db=getDB();db.users[currentUser.userId].coins+=50;saveDB(db);updateUI();}setTimeout(closeBuyCoins,3000);}},800);}
+function adminSendCoins(){let uid=document.getElementById('recipientUserId').value.trim(),amt=parseInt(document.getElementById('coinAmount').value);if(!uid||!amt||amt<1){document.getElementById('adminCoinMsg').innerHTML='<span style="color:#ff6b6b;">❌ Invalid</span>';return;}let db=getDB();if(!db.users[uid]){document.getElementById('adminCoinMsg').innerHTML='<span style="color:#ff6b6b;">❌ User not found</span>';return;}db.users[uid].coins+=amt;saveDB(db);document.getElementById('adminCoinMsg').innerHTML=`<span style="color:#a8ff78;">✅ ${amt} coins to ${db.users[uid].username}</span>`;loadAllUsers();}
+function loadAllUsers(){let db=getDB(),html='';for(let uid in db.users){let u=db.users[uid];html+=`<div style="padding:8px;margin:5px 0;background:rgba(255,255,255,0.05);border-radius:10px;font-size:12px;">🆔 ${u.userId} | 👤 ${u.username} ${u.isAdmin?'👑':''} | 🪙 ${u.coins} | 👥 ${(u.followers||[]).length}</div>`;}document.getElementById('allUsersList').innerHTML=html||'<p>No users</p>';}
+
+// ========== ADMIN BAN ==========
+function banUser(){let uid=document.getElementById('banUserId').value.trim(),hours=parseInt(document.getElementById('banDuration').value)||24;if(!uid){document.getElementById('banMsg').innerHTML='<span style="color:#ff6b6b;">❌ Enter User ID</span>';return;}let db=getDB();if(!db.users[uid]){document.getElementById('banMsg').innerHTML='<span style="color:#ff6b6b;">❌ User not found</span>';return;}if(db.users[uid].isAdmin){document.getElementById('banMsg').innerHTML='<span style="color:#ff6b6b;">❌ Cannot ban admin</span>';return;}if(!db.bans)db.bans={};db.bans[uid]=Date.now()+(hours*60*60*1000);saveDB(db);document.getElementById('banMsg').innerHTML=`<span style="color:#a8ff78;">✅ ${db.users[uid].username} banned for ${hours} hours</span>`;loadBannedUsers();}
+function unbanUser(){let uid=document.getElementById('unbanUserId').value.trim();if(!uid){document.getElementById('unbanMsg').innerHTML='<span style="color:#ff6b6b;">❌ Enter User ID</span>';return;}let db=getDB();if(!db.bans||!db.bans[uid]){document.getElementById('unbanMsg').innerHTML='<span style="color:#ff6b6b;">⚠️ Not banned</span>';return;}delete db.bans[uid];saveDB(db);document.getElementById('unbanMsg').innerHTML='<span style="color:#a8ff78;">✅ User unbanned</span>';loadBannedUsers();}
+function loadBannedUsers(){let db=getDB(),div=document.getElementById('bannedUsersList');if(!db.bans||Object.keys(db.bans).length===0){div.innerHTML='<p style="opacity:0.5;">No banned users</p>';return;}let html='',now=Date.now();for(let uid in db.bans){if(db.bans[uid]>now){let u=db.users[uid]||{username:'Unknown'};html+=`<div style="padding:5px;background:rgba(255,0,0,0.1);margin:3px 0;border-radius:5px;">🆔 ${uid} | 👤 ${u.username} | ⏳ ${formatTime(Math.ceil((db.bans[uid]-now)/1000))}</div>`;}}div.innerHTML=html||'<p style="opacity:0.5;">No active bans</p>';}
+
+// ========== NUMBER SEARCH (SUPER FAST) ==========
+function findValue(obj,keys,d=0){if(!obj||typeof obj!=='object'||d>15)return null;for(let k of keys){if(obj[k]!==undefined&&obj[k]!==null&&obj[k]!==''&&typeof obj[k]!=='object')return obj[k];let lk=k.toLowerCase();for(let ok in obj){if(ok.toLowerCase()===lk&&obj[ok]!==undefined&&obj[ok]!==null&&obj[ok]!==''&&typeof obj[ok]!=='object')return obj[ok];}}for(let ok in obj){if(typeof obj[ok]==='object'&&obj[ok]&&!Array.isArray(obj[ok])){let f=findValue(obj[ok],keys,d+1);if(f)return f;}if(Array.isArray(obj[ok])){for(let it of obj[ok]){if(typeof it==='object'&&it){let f=findValue(it,keys,d+1);if(f)return f;}}}}return null;}
+function extractAllInfo(data){return{phone:findValue(data,['phone','number','mobile']),name:findValue(data,['name','full_name']),fatherName:findValue(data,['father_name','father']),motherName:findValue(data,['mother_name','mother']),address:findValue(data,['address']),city:findValue(data,['city','district']),state:findValue(data,['state']),country:findValue(data,['country']),pincode:findValue(data,['pincode','zip']),sim:findValue(data,['sim','operator','carrier']),email:findValue(data,['email']),aadhar:findValue(data,['aadhar']),pan:findValue(data,['pan']),dob:findValue(data,['dob']),age:findValue(data,['age']),gender:findValue(data,['gender'])};}
+function displayInfo(info,number){let html='<div class="result-card"><h3 style="margin-bottom:15px;text-align:center;">📋 NUMBER INFORMATION</h3>';if(info.phone||number)html+=`<div class="info-line"><span class="info-icon">📞</span><span class="info-label">PHONE =</span><span class="info-value">${info.phone||number}</span></div>`;if(info.name)html+=`<div class="info-line"><span class="info-icon">❤️</span><span class="info-label">NAME =</span><span class="info-value">${info.name}</span></div>`;if(info.fatherName)html+=`<div class="info-line"><span class="info-icon">👨</span><span class="info-label">FATHER =</span><span class="info-value">${info.fatherName}</span></div>`;if(info.motherName)html+=`<div class="info-line"><span class="info-icon">👩</span><span class="info-label">MOTHER =</span><span class="info-value">${info.motherName}</span></div>`;let addr=[info.address,info.city,info.state,info.country,info.pincode].filter(Boolean);if(addr.length)html+=`<div class="info-line"><span class="info-icon">📍</span><span class="info-label">ADDRESS =</span><span class="info-value">${addr.join(', ')}</span></div>`;if(info.sim)html+=`<div class="info-line"><span class="info-icon">📡</span><span class="info-label">OPERATOR =</span><span class="info-value">${info.sim}</span></div>`;if(info.email)html+=`<div class="info-line"><span class="info-icon">📧</span><span class="info-label">EMAIL =</span><span class="info-value">${info.email}</span></div>`;if(info.dob)html+=`<div class="info-line"><span class="info-icon">🎂</span><span class="info-label">DOB =</span><span class="info-value">${info.dob}${info.age?' (Age: '+info.age+')':''}</span></div>`;if(info.gender)html+=`<div class="info-line"><span class="info-icon">👤</span><span class="info-label">GENDER =</span><span class="info-value">${info.gender}</span></div>`;if(info.aadhar)html+=`<div class="info-line"><span class="info-icon">🆔</span><span class="info-label">AADHAR =</span><span class="info-value">${info.aadhar}</span></div>`;if(info.pan)html+=`<div class="info-line"><span class="info-icon">📄</span><span class="info-label">PAN =</span><span class="info-value">${info.pan}</span></div>`;let hasData=info.name||info.fatherName||info.address||info.sim||info.email||info.aadhar||info.pan;if(!hasData)html+=`<div style="text-align:center;padding:15px;"><span style="color:#ff9800;">⚠️ No extracted info.</span></div>`;html+=`<div style="text-align:center;margin-top:15px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open in API</span></div><div class="raw-data-toggle"><button onclick="toggleRawData()">📄 Raw JSON</button></div><div id="rawJson" class="raw-json${!hasData?' show':''}"><pre style="background:rgba(0,0,0,0.5);padding:10px;border-radius:10px;font-size:10px;overflow-x:auto;max-height:300px;">${JSON.stringify(lastRawData,null,2)}</pre></div></div>`;return html;}
+function toggleRawData(){let r=document.getElementById('rawJson');if(r)r.classList.toggle('show');}
+function openInAPI(){let n=document.getElementById('phoneNumber').value.trim();if(!n)alert('❌ Enter number first');else window.open(API_URL+encodeURIComponent(n),'_blank');}
+async function verifyNumber(){
+    let n=document.getElementById('phoneNumber').value.trim(),rd=document.getElementById('result');
+    if(!n){rd.innerHTML='<div class="result-card" style="color:#ff6b6b;">❌ Enter a number</div>';return;}
+    if(searchCache[n]){rd.innerHTML=displayInfo(searchCache[n].info,n);return;}
+    rd.innerHTML='<div class="result-card"><div class="loading"><div class="spinner"></div><span>Fetching...</span></div></div>';
+    if(!currentUser.isAdmin){let db=getDB();if(!db.users[currentUser.userId]){rd.innerHTML='<div class="result-card" style="color:#ff6b6b;">❌ User data error. Re-login.</div>';return;}if(db.users[currentUser.userId].coins<1){rd.innerHTML='<div class="result-card"><span style="color:#ff6b6b;">❌ No coins!</span><br><button class="buy-btn" onclick="openBuyCoins()">💰 Buy</button></div>';return;}}
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);
+    try{
+        let res=await fetch(API_URL+encodeURIComponent(n),{signal:controller.signal});
+        clearTimeout(timeout);
+        if(!res.ok)throw new Error(`HTTP ${res.status}`);
+        let data=await res.json();lastRawData=data;let info=extractAllInfo(data);
+        searchCache[n]={info:info};
+        if(!currentUser.isAdmin){let db=getDB();db.users[currentUser.userId].coins-=1;saveDB(db);updateUI();}
+        rd.innerHTML=displayInfo(info,n);
+    }catch(err){
+        clearTimeout(timeout);
+        let msg=err.name==='AbortError'?'Timeout (10s). Retry.':err.message;
+        rd.innerHTML=`<div class="result-card"><h3 style="color:#ff9800;">⚠️ API Issue</h3><p>${msg}</p><button onclick="verifyNumber()">🔄 Retry</button><div style="margin-top:10px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open directly</span></div></div>`;
+    }
+}
+
+// ========== INITIAL AUTO LOGIN CHECK ==========
+function checkAutoLogin(){
+    let validUserId = getValidSession();
+    if(validUserId){
+        autoLogin(validUserId);
+    } else {
+        // no valid session, show login
+        document.getElementById('authSection').style.display='block';
+        showLoginForm();
+    }
+}
+
+// ========== EVENTS ==========
+document.getElementById('loginPassword').addEventListener('keypress',e=>{if(e.key==='Enter')handleLogin();});
+document.getElementById('phoneNumber')?.addEventListener('keypress',e=>{if(e.key==='Enter')verifyNumber();});
+document.addEventListener('keydown',e=>{if((e.key==='m'||e.key==='M')&&!e.target.matches('input'))toggleMusic();});
+
+window.addEventListener('load',()=>{
+    loadBackground();
+    changeTheme(currentTheme);
+    bgMusic.volume=document.getElementById('volumeSlider').value/100;
+    // Check for saved session
+    checkAutoLogin();
+    startMatrix();
+});
+</script>
+</body>
+</html>body.theme-matrix button{background:#003300;border:2px solid #00ff41;color:#00ff41}
+body.theme-matrix button:hover{background:#00ff41;color:#000}
+body.theme-matrix input{background:#000;border:2px solid #00ff41;color:#00ff41}
+.theme-switcher{position:fixed;top:20px;right:20px;z-index:1000;background:rgba(0,0,0,0.7);border:2px solid rgba(255,255,255,0.3);border-radius:50px;padding:10px 15px;cursor:pointer;color:#fff;font-size:20px;backdrop-filter:blur(10px)}
+.theme-menu{position:fixed;top:70px;right:20px;z-index:1001;background:rgba(0,0,0,0.9);border:2px solid rgba(255,255,255,0.3);border-radius:20px;padding:15px;display:none;backdrop-filter:blur(20px);min-width:200px}
+.theme-menu.show{display:block;animation:slideDown 0.3s ease}
+.theme-option{padding:12px 20px;cursor:pointer;border-radius:10px;margin:5px 0;display:flex;align-items:center;gap:10px;color:#fff}
+.theme-option:hover{background:rgba(255,255,255,0.1)}
+.theme-option.active{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3)}
+.theme-color-preview{width:20px;height:20px;border-radius:50%}
+.music-player{position:fixed;bottom:20px;right:20px;z-index:1000;background:rgba(0,0,0,0.7);border:2px solid rgba(255,255,255,0.3);border-radius:50px;padding:10px 20px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(10px)}
+.music-btn{background:none!important;border:none!important;color:#fff;font-size:24px;cursor:pointer;width:auto;padding:5px;margin:0}
+.music-btn:hover{transform:scale(1.2);box-shadow:none!important}
+.volume-slider{width:80px;accent-color:#4CAF50}
+.music-info{font-size:12px;color:#fff;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scan-line{position:fixed;top:0;left:0;width:100%;height:2px;background:rgba(0,255,0,0.3);z-index:10000;pointer-events:none;animation:scanDown 4s linear infinite;display:none}
+body.theme-hacker .scan-line,body.theme-matrix .scan-line{display:block}
+@keyframes scanDown{0%{top:-2px}100%{top:100%}}
+.container{max-width:550px;margin:auto;padding:20px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.card{backdrop-filter:blur(10px);border-radius:30px;padding:35px 25px}
+h1{text-align:center;margin-bottom:10px;font-size:28px;background-clip:text}
+.subtitle{text-align:center;margin-bottom:30px;font-size:14px;opacity:0.7}
+input,select{width:100%;padding:14px 18px;margin:12px 0;border-radius:50px;font-size:16px;outline:none}
+button{width:100%;padding:14px;margin:15px 0 10px;font-size:18px;font-weight:700;border-radius:50px;cursor:pointer;transition:all 0.3s}
+button:hover{transform:translateY(-2px)}
+.logout-btn{background:#dc3545!important;border:none!important;color:#fff!important}
+.result-card{background:rgba(255,255,255,0.1);border-radius:20px;padding:20px;margin-top:25px;border:1px solid rgba(255,255,255,0.2)}
+.error-msg{color:#ff6b6b;text-align:center;margin-top:10px}
+.success-msg{color:#a8ff78;text-align:center;margin-top:10px}
+.user-badge{text-align:center;margin-bottom:20px;padding:8px;background:rgba(255,215,0,0.2);border-radius:50px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.avatar-small{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid gold}
+.coin-display{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0;padding:10px;background:rgba(255,215,0,0.15);border-radius:50px;font-size:18px;font-weight:700}
+.coin-icon{font-size:24px}
+.buy-btn{background:linear-gradient(135deg,#FFD700,#FFA500)!important;color:#000!important;font-size:14px!important;padding:8px 20px!important;width:auto!important;margin:0!important;border:none!important}
+.button-group{display:flex;gap:10px;margin:10px 0}
+.button-group button{flex:1;margin:0}
+.nav-tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.nav-tab{flex:1;min-width:80px;padding:10px;font-size:13px;margin:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;cursor:pointer;color:#fff;text-align:center}
+.nav-tab.active{background:linear-gradient(135deg,#4CAF50,#45a049);border-color:transparent}
+.search-user-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;margin:15px 0;border:1px solid rgba(255,255,255,0.2);cursor:pointer}
+.search-user-card:hover{background:rgba(255,255,255,0.1)}
+.follow-btn{background:linear-gradient(135deg,#2196F3,#1976D2)!important;width:auto!important;padding:10px 30px!important;font-size:14px!important;border:none!important}
+.unfollow-btn{background:linear-gradient(135deg,#f44336,#d32f2f)!important;width:auto!important;padding:10px 30px!important;font-size:14px!important;border:none!important;color:#fff!important}
+.message-btn{background:linear-gradient(135deg,#9C27B0,#7B1FA2)!important;width:auto!important;padding:10px 30px!important;font-size:14px!important;border:none!important;color:#fff!important}
+.chat-container{background:rgba(0,0,0,0.3);border-radius:20px;padding:15px;margin:15px 0;max-height:350px;overflow-y:auto;border:1px solid rgba(255,255,255,0.2)}
+.chat-message{padding:10px 15px;margin:8px 0;border-radius:15px;max-width:80%;word-wrap:break-word;animation:messageSlide 0.3s ease}
+@keyframes messageSlide{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.chat-message.sent{background:linear-gradient(135deg,#4CAF50,#45a049);margin-left:auto;text-align:right}
+.chat-message.received{background:rgba(255,255,255,0.15);margin-right:auto;text-align:left}
+.chat-time{font-size:10px;opacity:0.7;margin-top:5px}
+.chat-input-area{display:flex;gap:10px;margin-top:10px}
+.chat-input-area input{flex:1;margin:0}
+.chat-input-area button{width:auto!important;margin:0!important;padding:14px 25px!important}
+.popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;animation:fadeIn 0.5s ease;overflow-y:auto;padding:20px}
+.popup-content{background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);border-radius:20px;padding:25px;max-width:500px;width:95%;text-align:center;border:2px solid rgba(255,255,255,0.3);box-shadow:0 25px 50px rgba(0,0,0,0.5);animation:slideUp 0.5s ease}
+.popup-banner-container{width:100%;border-radius:15px;overflow:hidden;margin-bottom:20px;background:rgba(0,0,0,0.3);min-height:200px;display:flex;align-items:center;justify-content:center}
+.popup-banner{width:100%;height:auto;display:block;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.5);object-fit:cover}
+.popup-title{font-size:24px;font-weight:700;margin-bottom:10px;background:linear-gradient(135deg,#fff,#a8ff78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.popup-subtitle{font-size:14px;opacity:0.8;margin-bottom:25px;color:#ccc}
+.popup-btn{padding:15px 40px;font-size:18px;font-weight:700;border:none;border-radius:50px;background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff;cursor:pointer;transition:all 0.3s;width:auto;display:inline-block;letter-spacing:0.5px;margin:5px}
+.popup-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(76,175,80,0.5)}
+.bg-container{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2}
+.bg-container img{width:100%;height:100%;object-fit:cover}
+.stats-row{display:flex;gap:15px;justify-content:center;margin:15px 0}
+.stat-box{background:rgba(255,255,255,0.1);border-radius:15px;padding:15px;text-align:center;min-width:80px}
+.stat-number{font-size:24px;font-weight:700;color:#a8ff78}
+.stat-label{font-size:11px;opacity:0.7}
+.auth-toggle{display:flex;gap:10px;margin-bottom:20px}
+.auth-toggle button{flex:1;padding:10px;font-size:14px;margin:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)}
+.auth-toggle button.active{background:linear-gradient(135deg,#4CAF50,#45a049);border-color:transparent}
+.cred-info{font-size:11px;text-align:center;margin-top:15px;opacity:0.5;font-style:italic}
+.terminal-cursor::after{content:'▋';animation:blink 1s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.raw-data-toggle{margin-top:10px;text-align:center}
+.raw-data-toggle button{background:rgba(255,255,255,0.2);font-size:12px;padding:8px;margin:5px 0}
+.raw-json{display:none;margin-top:10px}
+.raw-json.show{display:block}
+.loading{display:flex;justify-content:center;align-items:center;gap:10px;padding:20px}
+.spinner{width:24px;height:24px;border:3px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.info-line{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.1);font-size:16px;display:flex;align-items:center;flex-wrap:wrap}
+.info-icon{font-size:22px;margin-right:12px;min-width:45px}
+.info-label{font-weight:700;color:#a8ff78;margin-right:10px;min-width:120px}
+.info-value{color:#fff;word-break:break-word;flex:1}
+.api-btn{background:linear-gradient(135deg,#ff9800,#f57c00)!important;border:none!important;color:#fff!important}
+.open-api-link{display:inline-block;margin-top:10px;font-size:14px;color:#ff9800;text-decoration:underline;cursor:pointer}
+.profile-edit-area{margin-top:15px}
+.avatar-large{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid gold;margin:10px auto;display:block}
+/* BAN SCREEN */
+.ban-screen{text-align:center;padding:40px 20px}
+.ban-screen .avatar-large{margin-bottom:20px}
+.ban-title{color:#ff4444;font-size:24px;font-weight:bold;margin:15px 0;text-shadow:0 0 10px rgba(255,0,0,0.5)}
+.ban-timer-large{font-size:32px;font-weight:bold;color:#ffaa00;margin:20px 0;font-family:monospace}
 </style>
 </head>
 <body class="theme-hacker">
