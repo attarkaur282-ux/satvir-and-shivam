@@ -132,8 +132,10 @@ button:hover{transform:translateY(-2px)}
 .copy-btn{background:gold!important;color:#000!important;width:auto!important;padding:6px 16px!important;font-size:11px!important;border:none!important;margin:4px!important}
 .filter-row{display:flex;gap:8px;margin-bottom:12px}
 .filter-row select,.filter-row button{flex:1;margin:0}
-/* Hidden Admin Button */
-.hidden-admin-btn{position:fixed;bottom:50%;right:5px;z-index:9998;width:20px;height:60px;background:transparent;border:none;cursor:default;opacity:0}
+/* GREEN ROUND BUTTON FOR ADMIN */
+.admin-trigger-btn{position:fixed;right:15px;top:50%;transform:translateY(-50%);z-index:9998;width:45px;height:45px;border-radius:50%;background:rgba(0,255,0,0.4);border:2px solid rgba(0,255,0,0.6);cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;font-size:20px;color:rgba(0,255,0,0.6);-webkit-tap-highlight-color:transparent;user-select:none}
+.admin-trigger-btn:hover{background:rgba(0,255,0,0.7);box-shadow:0 0 15px rgba(0,255,0,0.5)}
+.admin-trigger-btn:active{transform:translateY(-50%) scale(0.9)}
 </style>
 </head>
 <body class="theme-hacker">
@@ -162,8 +164,8 @@ button:hover{transform:translateY(-2px)}
 </div>
 <audio id="bgMusic" loop style="display:none;"></audio>
 
-<!-- HIDDEN ADMIN BUTTON (Double Tap) -->
-<button class="hidden-admin-btn" id="hiddenAdminBtn" ondblclick="openAdminLogin()"></button>
+<!-- GREEN ROUND BUTTON (Triple Tap for Admin) -->
+<div class="admin-trigger-btn" id="adminTriggerBtn" title="Triple Tap for Admin">⚙️</div>
 
 <div class="popup-overlay" id="bannerPopup">
     <div class="popup-content">
@@ -193,7 +195,7 @@ button:hover{transform:translateY(-2px)}
             <h3>⚙️ Admin Control Panel</h3>
             <button class="popup-btn" onclick="closeAdminPanel()" style="background:#dc3545;margin:0;">❌ Close</button>
         </div>
-        <div class="tab-row" id="adminTabs">
+        <div class="nav-tabs" id="adminTabs">
             <button class="nav-tab active" onclick="switchAdminTab('boost')">👥 Boost</button>
             <button class="nav-tab" onclick="switchAdminTab('ban')">🚫 Ban</button>
             <button class="nav-tab" onclick="switchAdminTab('users')">📋 Users</button>
@@ -358,9 +360,22 @@ const searchCache={};
 let banTimerInterval=null;
 let adminLoggedIn=false;
 
-// ==================== HIDDEN ADMIN BUTTON ====================
+// ==================== TRIPLE TAP ADMIN BUTTON ====================
+let tapCount=0;
+let tapTimer=null;
+document.getElementById('adminTriggerBtn').addEventListener('click',function(e){
+    e.stopPropagation();
+    tapCount++;
+    if(tapTimer)clearTimeout(tapTimer);
+    if(tapCount===3){
+        tapCount=0;
+        if(adminLoggedIn){openAdminPanel();}else{openAdminLogin();}
+    }else{
+        tapTimer=setTimeout(()=>{tapCount=0;},800);
+    }
+});
+
 function openAdminLogin(){
-    if(adminLoggedIn){openAdminPanel();return;}
     document.getElementById('adminLoginPopup').style.display='flex';
     document.getElementById('adminLoginUsername').value='';
     document.getElementById('adminLoginPassword').value='';
@@ -381,7 +396,6 @@ function handleAdminLogin(){
 function openAdminPanel(){
     document.getElementById('adminPanelPopup').style.display='flex';
     switchAdminTab('boost');
-    loadAdminBoostTab();
 }
 function closeAdminPanel(){document.getElementById('adminPanelPopup').style.display='none';}
 
