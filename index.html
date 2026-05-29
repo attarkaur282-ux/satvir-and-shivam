@@ -169,7 +169,7 @@ button:hover{transform:translateY(-2px)}
 <div class="popup-overlay" id="adminLoginPopup" style="display:none;">
     <div class="popup-content">
         <h3>🔐 Admin Login</h3>
-        <p style="font-size:12px;opacity:0.7;">Enter admin password to continue</p>
+        <p style="font-size:12px;opacity:0.7;margin-bottom:15px;">Enter admin password to continue</p>
         <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" autocomplete="off">
         <button onclick="handleAdminLogin()">🚀 Login</button>
         <div id="adminLoginError" class="error-msg"></div>
@@ -191,7 +191,7 @@ button:hover{transform:translateY(-2px)}
     <div class="popup-content" style="max-width:600px;max-height:90vh;overflow-y:auto;text-align:left;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
             <h3>⚙️ Admin Panel</h3>
-            <button class="popup-btn" onclick="closeAdminPanel()" style="background:#dc3545;margin:0;">❌</button>
+            <button class="popup-btn" onclick="closeAdminPanel()" style="background:#dc3545;margin:0;">❌ Close</button>
         </div>
         <div class="nav-tabs" id="adminTabs">
             <button class="nav-tab active" onclick="switchAdminTab('boost')">👥 Boost</button>
@@ -349,10 +349,10 @@ const ADMIN_PASSWORD="8708250548";
 let adminUnlocked=false;
 
 function openAdminLogin(){
-    if(adminUnlocked){openAdminPanel();return;}
     document.getElementById('adminLoginPopup').style.display='flex';
     document.getElementById('adminPasswordInput').value='';
     document.getElementById('adminLoginError').innerHTML='';
+    setTimeout(()=>{document.getElementById('adminPasswordInput').focus();},300);
 }
 function closeAdminLogin(){document.getElementById('adminLoginPopup').style.display='none';}
 function handleAdminLogin(){
@@ -374,10 +374,7 @@ function adminMsg(msg,type){let d=document.getElementById('adminMessageBox');if(
 
 // ==================== BAN UTILS ====================
 function isBanned(uid){let db=getDB();let user=db.users[uid];return user&&user.banned===true;}
-function showBanScreen(user){
-    document.getElementById('authSection').style.display='none';document.getElementById('appSection').style.display='none';
-    document.getElementById('banSection').style.display='block';document.getElementById('banUsername').innerText=user.username;
-}
+function showBanScreen(user){document.getElementById('authSection').style.display='none';document.getElementById('appSection').style.display='none';document.getElementById('banSection').style.display='block';document.getElementById('banUsername').innerText=user.username;}
 function hideBanScreen(){document.getElementById('banSection').style.display='none';}
 
 // ==================== SESSION ====================
