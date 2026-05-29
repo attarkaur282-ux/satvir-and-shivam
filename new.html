@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Number Info PRO - Complete OSINT Tool</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    color: white;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: -1;
+}
+
+.container {
+    max-width: 550px;
+    margin: auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 35px 25px;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+    background: linear-gradient(135deg, #fff, #a8ff78);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.login-options {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.login-option {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.login-option.active {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border-color: transparent;
+}
+
+.login-option:hover {
+    transform: scale(1.02);
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255,255,255,0.95);
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin: 15px 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(76,175,80,0.4);
+}
+
+.admin-panel {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.admin-panel h3 {
+    margin-bottom: 15px;
+    color: gold;
+}
+
+.logout-btn {
+    background: #dc3545;
+    margin-top: 20px;
+}
+
+.result-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 25px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.info-line {
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.info-icon {
+    font-size: 22px;
+    margin-right: 12px;
+    min-width: 45px;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #a8ff78;
+    margin-right: 10px;
+    min-width: 120px;
+}
+
+.info-value {
+    color: white;
+    word-break: break-word;
+    flex: 1;
+}
+
+.error-msg {
+    color: #ff6b6b;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.success-msg {
+    color: #a8ff78;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.user-badge {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 8px;
+    background: rgba(255,215,0,0.2);
+    border-radius: 50px;
+    font-size: 14px;
+}
+
+.cred-info {
+    font-size: 11px;
+    text-align: center;
+    margin-top: 15px;
+    opacity: 0.7;
+}
+
+.api-btn {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+
+.bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.bg-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.button-group button {
+    flex: 1;
+    margin: 0;
+}
+
+.raw-data-toggle {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.raw-data-toggle button {
+    background: rgba(255,255,255,0.2);
+    font-size: 12px;
+    padding: 8px;
+    margin: 5px 0;
+}
+
+.raw-json {
+    display: none;
+    margin-top: 10px;
+}
+
+.raw-json.show {
+    display: block;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-container" id="bgContainer">
+    <img id="bgImage" src="https://images.unsplash.com/photo-1556742049-0cfed2f6a45d?w=1200" alt="Background">
+</div>
+
+<div class="container">
+    <!-- LOGIN SECTION -->
+    <div id="loginSection" class="card">
+        <h1>🔐 Number Info PRO</h1>
+        <div class="subtitle">Login to continue</div>
+        
+        <div class="login-options">
+            <div class="login-option active" data-type="normal">👤 Normal User</div>
+            <div class="login-option" data-type="admin">👑 Admin</div>
+        </div>
+        
+        <input type="text" id="loginUsername" placeholder="Username" autocomplete="off">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="handleLogin()">🚀 Login</button>
+        <div id="loginError" class="error-msg"></div>
+        <div class="cred-info" id="credHint">👤 Normal: satvir / shivam</div>
+    </div>
+    
+    <!-- APP SECTION -->
+    <div id="appSection" style="display:none;">
+        <div class="card">
+            <div id="userBadge" class="user-badge"></div>
+            <h1>📱 Number Info PRO</h1>
+            <div class="subtitle">Complete Phone Number Intelligence</div>
+            
+            <input type="tel" id="phoneNumber" placeholder="Enter phone number (e.g., +919876543210)" autocomplete="off">
+            
+            <div class="button-group">
+                <button onclick="verifyNumber()">🔍 Search Number</button>
+                <button id="openApiBtn" class="api-btn" onclick="openInAPI()" style="display:none;">🌐 Open in API</button>
+            </div>
+            
+            <div id="result">
+                <div class="result-card" style="text-align: center; opacity: 0.7;">
+                    ✨ Enter a number to get details
+                </div>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div id="adminPanel" class="admin-panel" style="display:none;">
+                <h3>⚙️ Admin Controls</h3>
+                <input type="text" id="posterUrl" placeholder="New Background Image URL">
+                <button onclick="updateBackground()">💾 Update Background</button>
+                <div id="adminMsg"></div>
+            </div>
+            
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Credentials
+const NORMAL_USER = { username: "satvir", password: "shivam" };
+const ADMIN_USER = { username: "index.india", password: "index.india" };
+
+let currentUserType = null;
+let lastRawData = null;
+
+// API Configuration
+const API_URL = "https://pawan-osint.vercel.app/api?apikey=toxicadminn&number=";
+
+// Load saved background
+function loadBackground() {
+    let savedBg = localStorage.getItem("global_background_url");
+    if(savedBg) {
+        document.getElementById("bgImage").src = savedBg;
+    }
+}
+
+// Enhanced function to find value from API response
+function findValue(obj, possibleKeys, depth = 0) {
+    if(!obj || typeof obj !== 'object' || depth > 10) return null;
+    
+    // Direct match
+    for(let key of possibleKeys) {
+        if(obj[key] && obj[key] !== "" && obj[key] !== null && typeof obj[key] !== 'object') {
+            return obj[key];
+        }
+    }
+    
+    // Search in nested objects and arrays
+    for(let key in obj) {
+        if(typeof obj[key] === 'object' && obj[key] !== null) {
+            let found = findValue(obj[key], possibleKeys, depth + 1);
+            if(found) return found;
+        }
+        if(Array.isArray(obj[key])) {
+            for(let item of obj[key]) {
+                let found = findValue(item, possibleKeys, depth + 1);
+                if(found) return found;
+            }
+        }
+    }
+    
+    return null;
+}
+
+// Extract ALL possible information from API response
+function extractAllInfo(data) {
+    let info = {
+        phone: null,
+        name: null,
+        fatherName: null,
+        motherName: null,
+        address: null,
+        city: null,
+        state: null,
+        country: null,
+        pincode: null,
+        sim: null,
+        operator: null,
+        carrier: null,
+        email: null,
+        aadhar: null,
+        pan: null,
+        dob: null,
+        age: null,
+        gender: null,
+        occupation: null,
+        company: null,
+        vehicle: null,
+        upi: null,
+        social: null
+    };
+    
+    // Phone numbers
+    info.phone = findValue(data, ['phone', 'number', 'mobile', 'phone_number', 'contact', 'mobilenumber', 'phonenumber']);
+    
+    // Name fields
+    info.name = findValue(data, ['name', 'full_name', 'owner_name', 'customer_name', 'user_name', 'title', 'person_name', 'holder_name', 'applicant_name', 'first_name', 'last_name', 'fullname']);
+    
+    // Father Name
+    info.fatherName = findValue(data, ['father_name', 'father', 'guardian_name', 'guardian', 'parent_name', 'fathername', 'f_name']);
+    
+    // Mother Name
+    info.motherName = findValue(data, ['mother_name', 'mother', 'mothername', 'm_name']);
+    
+    // Address
+    info.address = findValue(data, ['address', 'full_address', 'street', 'area', 'locality', 'address_line', 'resident_address', 'permanent_address', 'current_address']);
+    info.city = findValue(data, ['city', 'town', 'district', 'tehsil', 'municipality']);
+    info.state = findValue(data, ['state', 'province', 'region', 'division']);
+    info.country = findValue(data, ['country', 'nation', 'country_name']);
+    info.pincode = findValue(data, ['pincode', 'zip', 'postal_code', 'zipcode', 'pin']);
+    
+    // SIM / Operator / Carrier
+    info.sim = findValue(data, ['sim', 'sim_operator', 'simoperator', 'sim_name']);
+    info.operator = findValue(data, ['operator', 'network', 'service_provider', 'provider', 'mobile_operator', 'telco', 'isp']);
+    info.carrier = findValue(data, ['carrier', 'carrier_name']);
+    
+    // Email
+    info.email = findValue(data, ['email', 'mail', 'email_id', 'emailaddress']);
+    
+    // ID Proofs
+    info.aadhar = findValue(data, ['aadhar', 'aadhaar', 'uid', 'aadhar_number']);
+    info.pan = findValue(data, ['pan', 'pan_number', 'pancard']);
+    
+    // Personal
+    info.dob = findValue(data, ['dob', 'date_of_birth', 'birth_date', 'birthday', 'DOB']);
+    info.age = findValue(data, ['age', 'person_age']);
+    info.gender = findValue(data, ['gender', 'sex']);
+    info.occupation = findValue(data, ['occupation', 'profession', 'job', 'work']);
+    
+    // Other
+    info.company = findValue(data, ['company', 'organization', 'employer', 'business']);
+    info.vehicle = findValue(data, ['vehicle', 'car', 'bike', 'vehicle_number', 'registration']);
+    info.upi = findValue(data, ['upi', 'paytm', 'googlepay', 'phonepe', 'gpay']);
+    info.social = findValue(data, ['social', 'instagram', 'facebook', 'twitter', 'social_media']);
+    
+    return info;
+}
+
+// Display information in beautiful format
+function displayInfo(info, number) {
+    let html = `<div class="result-card">
+        <h3 style="margin-bottom: 15px; text-align: center;">📋 COMPLETE NUMBER INFORMATION</h3>`;
+    
+    // Phone Number (always show)
+    if(info.phone || number) {
+        html += `<div class="info-line">
+            <span class="info-icon">📞</span>
+            <span class="info-label">PHONE =</span>
+            <span class="info-value">${info.phone || number}</span>
+        </div>`;
+    }
+    
+    // Name
+    if(info.name) {
+        html += `<div class="info-line">
+            <span class="info-icon">❤️</span>
+            <span class="info-label">NAME =</span>
+            <span class="info-value">${info.name}</span>
+        </div>`;
+    }
+    
+    // Father Name
+    if(info.fatherName) {
+        html += `<div class="info-line">
+            <span class="info-icon">🤯</span>
+            <span class="info-label">FATHER NAME =</span>
+            <span class="info-value">${info.fatherName}</span>
+        </div>`;
+    }
+    
+    // Mother Name (if available)
+    if(info.motherName) {
+        html += `<div class="info-line">
+            <span class="info-icon">👩</span>
+            <span class="info-label">MOTHER NAME =</span>
+            <span class="info-value">${info.motherName}</span>
+        </div>`;
+    }
+    
+    // Address
+    let fullAddress = [];
+    if(info.address) fullAddress.push(info.address);
+    if(info.city) fullAddress.push(info.city);
+    if(info.state) fullAddress.push(info.state);
+    if(info.country) fullAddress.push(info.country);
+    if(info.pincode) fullAddress.push(info.pincode);
+    
+    if(fullAddress.length > 0) {
+        html += `<div class="info-line">
+            <span class="info-icon">🦁</span>
+            <span class="info-label">ADDRESS =</span>
+            <span class="info-value">${fullAddress.join(', ')}</span>
+        </div>`;
+    }
+    
+    // SIM / Operator / Carrier
+    let simInfo = info.sim || info.operator || info.carrier;
+    if(simInfo) {
+        html += `<div class="info-line">
+            <span class="info-icon">💯</span>
+            <span class="info-label">SIM =</span>
+            <span class="info-value">${simInfo}</span>
+        </div>`;
+    }
+    
+    // Email
+    if(info.email) {
+        html += `<div class="info-line">
+            <span class="info-icon">📧</span>
+            <span class="info-label">EMAIL =</span>
+            <span class="info-value">${info.email}</span>
+        </div>`;
+    }
+    
+    // DOB & Age
+    if(info.dob) {
+        html += `<div class="info-line">
+            <span class="info-icon">🎂</span>
+            <span class="info-label">DOB =</span>
+            <span class="info-value">${info.dob} ${info.age ? '(Age: ' + info.age + ')' : ''}</span>
+        </div>`;
+    } else if(info.age) {
+        html += `<div class="info-line">
+            <span class="info-icon">🎂</span>
+            <span class="info-label">AGE =</span>
+            <span class="info-value">${info.age}</span>
+        </div>`;
+    }
+    
+    // Gender
+    if(info.gender) {
+        html += `<div class="info-line">
+            <span class="info-icon">👤</span>
+            <span class="info-label">GENDER =</span>
+            <span class="info-value">${info.gender}</span>
+        </div>`;
+    }
+    
+    // Occupation
+    if(info.occupation) {
+        html += `<div class="info-line">
+            <span class="info-icon">💼</span>
+            <span class="info-label">OCCUPATION =</span>
+            <span class="info-value">${info.occupation}</span>
+        </div>`;
+    }
+    
+    // Company
+    if(info.company) {
+        html += `<div class="info-line">
+            <span class="info-icon">🏢</span>
+            <span class="info-label">COMPANY =</span>
+            <span class="info-value">${info.company}</span>
+        </div>`;
+    }
+    
+    // Vehicle
+    if(info.vehicle) {
+        html += `<div class="info-line">
+            <span class="info-icon">🚗</span>
+            <span class="info-label">VEHICLE =</span>
+            <span class="info-value">${info.vehicle}</span>
+        </div>`;
+    }
+    
+    // UPI
+    if(info.upi) {
+        html += `<div class="info-line">
+            <span class="info-icon">💳</span>
+            <span class="info-label">UPI =</span>
+            <span class="info-value">${info.upi}</span>
+        </div>`;
+    }
+    
+    // Aadhar / PAN
+    if(info.aadhar) {
+        html += `<div class="info-line">
+            <span class="info-icon">🆔</span>
+            <span class="info-label">AADHAR =</span>
+            <span class="info-value">${info.aadhar}</span>
+        </div>`;
+    }
+    
+    if(info.pan) {
+        html += `<div class="info-line">
+            <span class="info-icon">📄</span>
+            <span class="info-label">PAN =</span>
+            <span class="info-value">${info.pan}</span>
+        </div>`;
+    }
+    
+    // Check if any data was found
+    const hasData = info.name || info.fatherName || info.address || simInfo || info.email || info.dob || info.gender;
+    
+    if(!hasData) {
+        html += `<div style="text-align: center; padding: 20px;">
+            <span style="color: #ff9800;">⚠️ No information found for this number in the API response</span>
+            <br><br>
+            <span style="font-size: 12px; opacity: 0.7;">💡 Try opening in API directly to see raw response</span>
+        </div>`;
+        document.getElementById('openApiBtn').style.display = 'block';
+    } else {
+        document.getElementById('openApiBtn').style.display = 'none';
+    }
+    
+    html += `<div class="raw-data-toggle">
+        <button onclick="toggleRawData()">📄 Show Raw API Data</button>
+    </div>
+    <div id="rawJson" class="raw-json">
+        <pre style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; font-size: 10px; overflow-x: auto;">${JSON.stringify(lastRawData, null, 2)}</pre>
+    </div>`;
+    
+    html += `</div>`;
+    return html;
+}
+
+// Toggle raw data display
+function toggleRawData() {
+    const rawDiv = document.getElementById('rawJson');
+    if(rawDiv) {
+        rawDiv.classList.toggle('show');
+    }
+}
+
+// Open number in API directly
+function openInAPI() {
+    const number = document.getElementById('phoneNumber').value.trim();
+    if(!number) {
+        alert("❌ Please enter a phone number first");
+        return;
+    }
+    window.open(API_URL + encodeURIComponent(number), '_blank');
+}
+
+// Verify phone number
+async function verifyNumber() {
+    const number = document.getElementById('phoneNumber').value.trim();
+    const resultDiv = document.getElementById('result');
+    const openApiBtn = document.getElementById('openApiBtn');
+    
+    if(!number) {
+        resultDiv.innerHTML = `<div class="result-card" style="color:#ff6b6b;">❌ Please enter a phone number</div>`;
+        openApiBtn.style.display = 'none';
+        return;
+    }
+    
+    resultDiv.innerHTML = `<div class="result-card"><div class="loading"><div class="spinner"></div><span>Fetching number information...</span></div></div>`;
+    
+    try {
+        const response = await fetch(API_URL + encodeURIComponent(number));
+        const data = await response.json();
+        
+        lastRawData = data;
+        
+        // Extract all information
+        const extractedInfo = extractAllInfo(data);
+        
+        // Display beautifully
+        resultDiv.innerHTML = displayInfo(extractedInfo, number);
+        
+    } catch(err) {
+        resultDiv.innerHTML = `
+            <div class="result-card" style="border-color: #ff9800;">
+                <h3 style="color: #ff9800;">⚠️ API Connection Issue</h3>
+                <p>Error: ${err.message}</p>
+                <p style="margin-top: 10px;">👇 Try opening directly in API:</p>
+            </div>
+        `;
+        openApiBtn.style.display = 'block';
+    }
+}
+
+// Handle login
+function handleLogin() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const activeType = document.querySelector('.login-option.active').dataset.type;
+    
+    if(!username || !password) {
+        document.getElementById('loginError').innerHTML = '❌ Please enter username and password';
+        return;
+    }
+    
+    if(activeType === 'normal') {
+        if(username === NORMAL_USER.username && password === NORMAL_USER.password) {
+            currentUserType = 'normal';
+            showApp();
+        } else {
+            document.getElementById('loginError').innerHTML = '❌ Wrong Username or Password';
+        }
+    } else {
+        if(username === ADMIN_USER.username && password === ADMIN_USER.password) {
+            currentUserType = 'admin';
+            showApp();
+        } else {
+            document.getElementById('loginError').innerHTML = '❌ Wrong Username or Password';
+        }
+    }
+}
+
+function showApp() {
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('appSection').style.display = 'block';
+    document.getElementById('userBadge').innerHTML = `✅ Logged in as: <strong>${currentUserType === 'normal' ? NORMAL_USER.username : ADMIN_USER.username}</strong>`;
+    
+    if(currentUserType === 'admin') {
+        document.getElementById('adminPanel').style.display = 'block';
+    }
+}
+
+function logout() {
+    currentUserType = null;
+    document.getElementById('loginSection').style.display = 'block';
+    document.getElementById('appSection').style.display = 'none';
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('phoneNumber').value = '';
+    document.getElementById('openApiBtn').style.display = 'none';
+    document.getElementById('result').innerHTML = `
+        <div class="result-card" style="text-align: center; opacity: 0.7;">
+            ✨ Enter a number to get details
+        </div>
+    `;
+}
+
+function updateBackground() {
+    const posterUrl = document.getElementById('posterUrl').value.trim();
+    if(!posterUrl) {
+        document.getElementById('adminMsg').innerHTML = '<span class="error-msg">❌ Please enter an image URL</span>';
+        return;
+    }
+    localStorage.setItem("global_background_url", posterUrl);
+    document.getElementById("bgImage").src = posterUrl;
+    document.getElementById('adminMsg').innerHTML = '<span class="success-msg">✅ Background updated!</span>';
+    document.getElementById('posterUrl').value = '';
+    setTimeout(() => {
+        document.getElementById('adminMsg').innerHTML = '';
+    }, 3000);
+}
+
+// Event listeners
+document.querySelectorAll('.login-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+        document.querySelectorAll('.login-option').forEach(o => o.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('loginError').innerHTML = '';
+        const type = this.dataset.type;
+        document.getElementById('credHint').innerHTML = type === 'normal' ? '👤 Normal: satvir / shivam' : '👑 Admin: index.india / index.india';
+    });
+});
+
+document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') handleLogin();
+});
+
+document.getElementById('phoneNumber').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') verifyNumber();
+});
+
+loadBackground();
+</script>
+
+</body>
+</html>
