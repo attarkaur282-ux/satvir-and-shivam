@@ -12,10 +12,321 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Courier New', monospace;
     min-height: 100vh;
+    color: #00ff00;
+    background: #0a0a0a;
+    transition: all 0.5s ease;
+}
+
+/* ========== THEME STYLES ========== */
+/* Default Hacker Theme */
+body.theme-hacker {
+    color: #00ff00;
+    background: #0a0a0a;
+}
+body.theme-hacker .card {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+body.theme-hacker button {
+    background: #0a0a0a;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+}
+body.theme-hacker button:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    background: #00ff00;
+    color: #000;
+}
+body.theme-hacker input {
+    background: #0a0a0a;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+}
+body.theme-hacker .info-label {
+    color: #00ff00;
+}
+body.theme-hacker .info-value {
+    color: #0f0;
+}
+body.theme-hacker h1 {
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Cyberpunk Theme */
+body.theme-cyberpunk {
+    color: #ff00ff;
+    background: #0d0221;
+    font-family: 'Courier New', monospace;
+}
+body.theme-cyberpunk .card {
+    background: rgba(13, 2, 33, 0.95);
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+}
+body.theme-cyberpunk button {
+    background: linear-gradient(135deg, #ff00ff, #cc00cc);
+    border: none;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+body.theme-cyberpunk button:hover {
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+    transform: translateY(-2px);
+}
+body.theme-cyberpunk input {
+    background: rgba(255, 0, 255, 0.1);
+    border: 2px solid #ff00ff;
+    color: #ff00ff;
+}
+body.theme-cyberpunk .info-label {
+    color: #ff00ff;
+}
+body.theme-cyberpunk .info-value {
+    color: #ff69b4;
+}
+body.theme-cyberpunk h1 {
+    background: linear-gradient(135deg, #ff00ff, #ff69b4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Neon Blue Theme */
+body.theme-neon {
+    color: #00ffff;
+    background: #000b1a;
+}
+body.theme-neon .card {
+    background: rgba(0, 11, 26, 0.95);
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+}
+body.theme-neon button {
+    background: linear-gradient(135deg, #00ffff, #0088ff);
+    border: none;
+    color: #000;
+    font-weight: bold;
+}
+body.theme-neon button:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+}
+body.theme-neon input {
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid #00ffff;
+    color: #00ffff;
+}
+body.theme-neon .info-label {
+    color: #00ffff;
+}
+body.theme-neon .info-value {
+    color: #7fffff;
+}
+body.theme-neon h1 {
+    background: linear-gradient(135deg, #00ffff, #0088ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Gold Premium Theme */
+body.theme-gold {
+    color: #ffd700;
+    background: #1a1a00;
+    font-family: 'Georgia', serif;
+}
+body.theme-gold .card {
+    background: rgba(26, 26, 0, 0.95);
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+body.theme-gold button {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    border: none;
+    color: #000;
+    font-weight: bold;
+}
+body.theme-gold button:hover {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+}
+body.theme-gold input {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid #ffd700;
+    color: #ffd700;
+}
+body.theme-gold .info-label {
+    color: #ffd700;
+}
+body.theme-gold .info-value {
+    color: #ffed4a;
+}
+body.theme-gold h1 {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Matrix Theme */
+body.theme-matrix {
+    color: #00ff41;
+    background: #000;
+    font-family: 'Courier New', monospace;
+}
+body.theme-matrix .card {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #00ff41;
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.3);
+}
+body.theme-matrix button {
+    background: #003300;
+    border: 2px solid #00ff41;
+    color: #00ff41;
+}
+body.theme-matrix button:hover {
+    background: #00ff41;
+    color: #000;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.7);
+}
+body.theme-matrix input {
+    background: #000;
+    border: 2px solid #00ff41;
+    color: #00ff41;
+}
+body.theme-matrix .info-label {
+    color: #00ff41;
+}
+body.theme-matrix .info-value {
+    color: #00cc33;
+}
+
+/* Theme Switcher Button */
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 10px 15px;
+    cursor: pointer;
     color: white;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    font-size: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+}
+.theme-switcher:hover {
+    transform: scale(1.1);
+    border-color: rgba(255,255,255,0.6);
+}
+.theme-menu {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 1001;
+    background: rgba(0,0,0,0.9);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 15px;
+    display: none;
+    backdrop-filter: blur(20px);
+    min-width: 200px;
+}
+.theme-menu.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+.theme-option {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 5px 0;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+.theme-option:hover {
+    background: rgba(255,255,255,0.1);
+}
+.theme-option.active {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.theme-color-preview {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Music Player */
+.music-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+}
+.music-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: auto;
+    padding: 5px;
+    margin: 0;
+}
+.music-btn:hover {
+    transform: scale(1.2);
+}
+.volume-slider {
+    width: 80px;
+    accent-color: #4CAF50;
+}
+.music-info {
+    font-size: 12px;
+    color: white;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Hacker Mode Text Effects */
+.hacker-text {
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+}
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.1;
+}
+
+/* Terminal Effect */
+.terminal-cursor::after {
+    content: '▋';
+    animation: blink 1s infinite;
+}
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
 }
 
 body::before {
@@ -272,18 +583,215 @@ button:hover {
 .raw-json.show {
     display: block;
 }
+
+/* POPUP STYLES */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.popup-content {
+    background: rgba(20, 20, 40, 0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 25px;
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.5s ease;
+}
+
+.popup-banner-container {
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background: rgba(0,0,0,0.3);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-banner {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
+}
+
+.banner-error {
+    display: none;
+    padding: 40px;
+    color: #ff9800;
+    text-align: center;
+}
+
+.banner-error .error-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.banner-error .error-text {
+    font-size: 14px;
+    color: #ccc;
+    margin-top: 8px;
+}
+
+.popup-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff, #a8ff78);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.popup-subtitle {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 25px;
+    color: #ccc;
+}
+
+.popup-btn {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: auto;
+    display: inline-block;
+    letter-spacing: 0.5px;
+}
+
+.popup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(76,175,80,0.5);
+}
+
+/* Hacker Mode Scan Line */
+.scan-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 255, 0, 0.3);
+    z-index: 10000;
+    pointer-events: none;
+    animation: scanDown 4s linear infinite;
+    display: none;
+}
+body.theme-hacker .scan-line,
+body.theme-matrix .scan-line {
+    display: block;
+}
+
+@keyframes scanDown {
+    0% { top: -2px; }
+    100% { top: 100%; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 </style>
 </head>
-<body>
+<body class="theme-hacker">
+
+<!-- Scan Line Effect for Hacker Mode -->
+<div class="scan-line"></div>
+
+<!-- Matrix Background Canvas -->
+<canvas id="matrixCanvas" class="matrix-bg"></canvas>
 
 <div class="bg-container" id="bgContainer">
-    <img id="bgImage" src="https://images.unsplash.com/photo-1556742049-0cfed2f6a45d?w=1200" alt="Background">
+    <img id="bgImage" src="https://image-link.edgeone.app/1780034388606-2p82ld.jpg" alt="Background" crossorigin="anonymous">
+</div>
+
+<!-- Theme Switcher -->
+<div class="theme-switcher" onclick="toggleThemeMenu()" title="Change Theme">
+    🎨
+</div>
+<div class="theme-menu" id="themeMenu">
+    <div class="theme-option active" onclick="changeTheme('hacker')">
+        <span class="theme-color-preview" style="background: #00ff00;"></span>
+        💻 Hacker Mode
+    </div>
+    <div class="theme-option" onclick="changeTheme('cyberpunk')">
+        <span class="theme-color-preview" style="background: #ff00ff;"></span>
+        🌆 Cyberpunk
+    </div>
+    <div class="theme-option" onclick="changeTheme('neon')">
+        <span class="theme-color-preview" style="background: #00ffff;"></span>
+        💠 Neon Blue
+    </div>
+    <div class="theme-option" onclick="changeTheme('gold')">
+        <span class="theme-color-preview" style="background: #ffd700;"></span>
+        👑 Gold Premium
+    </div>
+    <div class="theme-option" onclick="changeTheme('matrix')">
+        <span class="theme-color-preview" style="background: #00ff41;"></span>
+        🟢 Matrix
+    </div>
+</div>
+
+<!-- Music Player -->
+<div class="music-player" id="musicPlayer">
+    <button class="music-btn" onclick="toggleMusic()" id="musicToggleBtn">▶️</button>
+    <div class="music-info" id="musicInfo">No Music</div>
+    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" onchange="changeVolume(this.value)">
+    <button class="music-btn" onclick="nextTrack()" style="font-size: 18px;">⏭️</button>
+</div>
+
+<audio id="bgMusic" loop style="display: none;"></audio>
+
+<!-- BANNER POPUP -->
+<div class="popup-overlay" id="bannerPopup">
+    <div class="popup-content">
+        <div class="popup-banner-container" id="bannerContainer">
+            <!-- Image will be loaded here dynamically -->
+        </div>
+        <h2 class="popup-title">🔥 Number Info PRO</h2>
+        <p class="popup-subtitle">Complete Phone Number OSINT Intelligence Tool</p>
+        <button class="popup-btn" onclick="closeBannerPopup()">👇 Tap to Continue 👇</button>
+    </div>
 </div>
 
 <div class="container">
     <!-- LOGIN SECTION -->
     <div id="loginSection" class="card">
-        <h1>🔐 Number Info PRO</h1>
+        <h1 class="terminal-cursor">🔐 Number Info PRO</h1>
         <div class="subtitle">Login to continue</div>
         
         <div class="login-options">
@@ -302,7 +810,7 @@ button:hover {
     <div id="appSection" style="display:none;">
         <div class="card">
             <div id="userBadge" class="user-badge"></div>
-            <h1>📱 Number Info PRO</h1>
+            <h1 class="terminal-cursor">📱 Number Info PRO</h1>
             <div class="subtitle">Complete Phone Number Intelligence</div>
             
             <input type="tel" id="phoneNumber" placeholder="Enter phone number (e.g., +919876543210)" autocomplete="off">
@@ -336,41 +844,282 @@ button:hover {
 const NORMAL_USER = { username: "satvir", password: "shivam" };
 const ADMIN_USER = { username: "index.india", password: "index.india" };
 
+// Default background and banner image URL
+const DEFAULT_BG_URL = "https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
+
 let currentUserType = null;
 let lastRawData = null;
 
 // API Configuration
 const API_URL = "https://pawan-osint.vercel.app/api?apikey=toxicadminn&number=";
 
-// Load saved background
-function loadBackground() {
-    let savedBg = localStorage.getItem("global_background_url");
-    if(savedBg) {
-        document.getElementById("bgImage").src = savedBg;
+// ========== THEME SYSTEM ==========
+let currentTheme = localStorage.getItem('selectedTheme') || 'hacker';
+
+function changeTheme(theme) {
+    currentTheme = theme;
+    localStorage.setItem('selectedTheme', theme);
+    
+    // Remove all theme classes
+    document.body.className = '';
+    document.body.classList.add('theme-' + theme);
+    
+    // Update active menu item
+    document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+    event.target.closest('.theme-option').classList.add('active');
+    
+    // Close menu
+    document.getElementById('themeMenu').classList.remove('show');
+    
+    // Show/hide matrix effect
+    if(theme === 'hacker' || theme === 'matrix') {
+        startMatrixEffect();
+    } else {
+        stopMatrixEffect();
     }
 }
 
-// Enhanced function to find value from API response
-function findValue(obj, possibleKeys, depth = 0) {
-    if(!obj || typeof obj !== 'object' || depth > 10) return null;
+function toggleThemeMenu() {
+    document.getElementById('themeMenu').classList.toggle('show');
+}
+
+// Close theme menu when clicking outside
+document.addEventListener('click', function(e) {
+    const menu = document.getElementById('themeMenu');
+    const switcher = document.querySelector('.theme-switcher');
+    if(!menu.contains(e.target) && !switcher.contains(e.target)) {
+        menu.classList.remove('show');
+    }
+});
+
+// ========== MATRIX RAIN EFFECT ==========
+let matrixInterval;
+const canvas = document.getElementById('matrixCanvas');
+const ctx = canvas.getContext('2d');
+
+function initMatrix() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function startMatrixEffect() {
+    initMatrix();
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
     
-    // Direct match
+    for(let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * canvas.height;
+    }
+    
+    if(matrixInterval) clearInterval(matrixInterval);
+    
+    matrixInterval = setInterval(() => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        if(currentTheme === 'hacker') {
+            ctx.fillStyle = '#0F0';
+        } else if(currentTheme === 'matrix') {
+            ctx.fillStyle = '#00ff41';
+        }
+        
+        ctx.font = fontSize + 'px monospace';
+        
+        for(let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            
+            if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }, 50);
+}
+
+function stopMatrixEffect() {
+    if(matrixInterval) {
+        clearInterval(matrixInterval);
+        matrixInterval = null;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+window.addEventListener('resize', () => {
+    if(currentTheme === 'hacker' || currentTheme === 'matrix') {
+        initMatrix();
+    }
+});
+
+// ========== MUSIC SYSTEM ==========
+const musicTracks = [
+    { name: 'Hacker Beat 1', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+    { name: 'Cyberpunk Vibes', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+    { name: 'Dark Synth', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+    { name: 'Neon Nights', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+    { name: 'Matrix Theme', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' }
+];
+
+let currentTrackIndex = 0;
+let isMusicPlaying = false;
+const bgMusic = document.getElementById('bgMusic');
+
+function loadTrack(index) {
+    if(index >= 0 && index < musicTracks.length) {
+        currentTrackIndex = index;
+        bgMusic.src = musicTracks[index].url;
+        document.getElementById('musicInfo').textContent = musicTracks[index].name;
+        if(isMusicPlaying) {
+            bgMusic.play().catch(e => console.log('Auto-play blocked'));
+        }
+    }
+}
+
+function toggleMusic() {
+    if(isMusicPlaying) {
+        bgMusic.pause();
+        document.getElementById('musicToggleBtn').textContent = '▶️';
+        isMusicPlaying = false;
+    } else {
+        if(!bgMusic.src || bgMusic.src === window.location.href) {
+            loadTrack(0);
+        }
+        bgMusic.play().then(() => {
+            document.getElementById('musicToggleBtn').textContent = '⏸️';
+            isMusicPlaying = true;
+        }).catch(e => {
+            alert('⚠️ Music play karne ke liye screen par kahi bhi click karo pehle (Browser policy)');
+        });
+    }
+}
+
+function nextTrack() {
+    currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
+    loadTrack(currentTrackIndex);
+    if(isMusicPlaying) {
+        bgMusic.play().catch(e => console.log('Play blocked'));
+    }
+}
+
+function changeVolume(value) {
+    bgMusic.volume = value / 100;
+}
+
+// Auto-play attempt on first user interaction
+document.addEventListener('click', function initAudio() {
+    if(!isMusicPlaying && bgMusic.src && bgMusic.src !== window.location.href) {
+        bgMusic.play().then(() => {
+            document.getElementById('musicToggleBtn').textContent = '⏸️';
+            isMusicPlaying = true;
+        }).catch(() => {});
+    }
+}, { once: true });
+
+// Banner image load karo
+function loadBannerImage(imageUrl) {
+    const bannerContainer = document.getElementById('bannerContainer');
+    
+    // Pehle container clear karo
+    bannerContainer.innerHTML = '';
+    
+    // Image element create karo
+    const img = document.createElement('img');
+    img.className = 'popup-banner';
+    img.alt = 'Banner';
+    img.referrerPolicy = 'no-referrer';
+    img.crossOrigin = 'anonymous';
+    
+    // Image load hone par
+    img.onload = function() {
+        bannerContainer.appendChild(img);
+    };
+    
+    // Image load fail hone par
+    img.onerror = function() {
+        // Try without crossorigin
+        img.removeAttribute('crossOrigin');
+        img.src = imageUrl + '?t=' + new Date().getTime();
+        
+        // Agar fir bhi fail ho to error show karo
+        img.onerror = function() {
+            bannerContainer.innerHTML = `
+                <div class="banner-error" style="display:block;">
+                    <div class="error-icon">🖼️</div>
+                    <p>Banner Image</p>
+                    <p class="error-text">Image load nahi ho pa rahi</p>
+                    <p class="error-text" style="font-size:10px; margin-top:5px;">${imageUrl}</p>
+                </div>
+            `;
+        };
+    };
+    
+    // Image source set karo
+    img.src = imageUrl;
+}
+
+// Close banner popup
+function closeBannerPopup() {
+    document.getElementById('bannerPopup').style.display = 'none';
+}
+
+// Load saved background or use default
+function loadBackground() {
+    let savedBg = localStorage.getItem("global_background_url");
+    let bgUrl = savedBg || DEFAULT_BG_URL;
+    
+    document.getElementById("bgImage").src = bgUrl;
+    
+    // Banner image load karo
+    loadBannerImage(bgUrl);
+    
+    if(!savedBg) {
+        localStorage.setItem("global_background_url", DEFAULT_BG_URL);
+    }
+}
+
+// ENHANCED: Improved findValue function with case-insensitive matching
+function findValue(obj, possibleKeys, depth = 0) {
+    if(!obj || typeof obj !== 'object' || depth > 15) return null;
+    
+    // Direct key matching (case-insensitive)
     for(let key of possibleKeys) {
-        if(obj[key] && obj[key] !== "" && obj[key] !== null && typeof obj[key] !== 'object') {
+        // Check exact match first
+        if(obj[key] !== undefined && obj[key] !== "" && obj[key] !== null && typeof obj[key] !== 'object') {
             return obj[key];
+        }
+        
+        // Case-insensitive matching
+        const lowerKey = key.toLowerCase();
+        for(let objKey in obj) {
+            if(objKey.toLowerCase() === lowerKey) {
+                if(obj[objKey] && obj[objKey] !== "" && obj[objKey] !== null && typeof obj[objKey] !== 'object') {
+                    return obj[objKey];
+                }
+            }
         }
     }
     
-    // Search in nested objects and arrays
+    // Recursive search in nested objects
     for(let key in obj) {
-        if(typeof obj[key] === 'object' && obj[key] !== null) {
-            let found = findValue(obj[key], possibleKeys, depth + 1);
-            if(found) return found;
-        }
-        if(Array.isArray(obj[key])) {
-            for(let item of obj[key]) {
-                let found = findValue(item, possibleKeys, depth + 1);
+        if(obj.hasOwnProperty(key)) {
+            const value = obj[key];
+            
+            // Check nested objects
+            if(typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                let found = findValue(value, possibleKeys, depth + 1);
                 if(found) return found;
+            }
+            
+            // Check arrays
+            if(Array.isArray(value)) {
+                for(let item of value) {
+                    if(typeof item === 'object' && item !== null) {
+                        let found = findValue(item, possibleKeys, depth + 1);
+                        if(found) return found;
+                    }
+                }
             }
         }
     }
@@ -378,122 +1127,75 @@ function findValue(obj, possibleKeys, depth = 0) {
     return null;
 }
 
-// Extract ALL possible information from API response
+// ENHANCED: Improved extractAllInfo with better father name detection
 function extractAllInfo(data) {
     let info = {
-        phone: null,
-        name: null,
-        fatherName: null,
-        motherName: null,
-        address: null,
-        city: null,
-        state: null,
-        country: null,
-        pincode: null,
-        sim: null,
-        operator: null,
-        carrier: null,
-        email: null,
-        aadhar: null,
-        pan: null,
-        dob: null,
-        age: null,
-        gender: null,
-        occupation: null,
-        company: null,
-        vehicle: null,
-        upi: null,
-        social: null
+        phone: null, name: null, fatherName: null, motherName: null,
+        address: null, city: null, state: null, country: null, pincode: null,
+        sim: null, operator: null, carrier: null, email: null,
+        aadhar: null, pan: null, dob: null, age: null, gender: null,
+        occupation: null, company: null, vehicle: null, upi: null, social: null
     };
     
-    // Phone numbers
-    info.phone = findValue(data, ['phone', 'number', 'mobile', 'phone_number', 'contact', 'mobilenumber', 'phonenumber']);
+    info.phone = findValue(data, ['phone', 'number', 'mobile', 'phone_number', 'contact', 'mobilenumber', 'phonenumber', 'Phone', 'Number', 'Mobile']);
+    info.name = findValue(data, ['name', 'full_name', 'owner_name', 'customer_name', 'user_name', 'title', 'person_name', 'holder_name', 'applicant_name', 'first_name', 'last_name', 'fullname', 'Name', 'FullName', 'HolderName']);
     
-    // Name fields
-    info.name = findValue(data, ['name', 'full_name', 'owner_name', 'customer_name', 'user_name', 'title', 'person_name', 'holder_name', 'applicant_name', 'first_name', 'last_name', 'fullname']);
+    // ENHANCED: Comprehensive father name detection with many variations
+    info.fatherName = findValue(data, [
+        'father_name', 'father', 'guardian_name', 'guardian', 'parent_name', 
+        'fathername', 'f_name', 'fathers_name', 'fathersname', 'dad_name',
+        'Father', 'FatherName', 'Father_Name', 'FathersName', 'DadName',
+        'FATHER_NAME', 'FATHERNAME', 'fathersName', 'father_Name',
+        'guardianName', 'guardian_Name', 'parentName', 'parent_Name',
+        'father_full_name', 'fatherfullname', 'fatherFullName',
+        'Father/Husband Name', 'father_husband_name', 'fatherHusbandName',
+        'guardian_father_name', 'guardianFatherName',
+        'relative_name', 'relativeName', 'RelationName',
+        'care_of', 'careOf', 'CareOf', 'c_o', 'C_O',
+        's_o', 'S_O', 'son_of', 'SonOf', 'd_o', 'D_O', 'daughter_of'
+    ]);
     
-    // Father Name
-    info.fatherName = findValue(data, ['father_name', 'father', 'guardian_name', 'guardian', 'parent_name', 'fathername', 'f_name']);
-    
-    // Mother Name
-    info.motherName = findValue(data, ['mother_name', 'mother', 'mothername', 'm_name']);
-    
-    // Address
-    info.address = findValue(data, ['address', 'full_address', 'street', 'area', 'locality', 'address_line', 'resident_address', 'permanent_address', 'current_address']);
-    info.city = findValue(data, ['city', 'town', 'district', 'tehsil', 'municipality']);
-    info.state = findValue(data, ['state', 'province', 'region', 'division']);
-    info.country = findValue(data, ['country', 'nation', 'country_name']);
-    info.pincode = findValue(data, ['pincode', 'zip', 'postal_code', 'zipcode', 'pin']);
-    
-    // SIM / Operator / Carrier
-    info.sim = findValue(data, ['sim', 'sim_operator', 'simoperator', 'sim_name']);
-    info.operator = findValue(data, ['operator', 'network', 'service_provider', 'provider', 'mobile_operator', 'telco', 'isp']);
-    info.carrier = findValue(data, ['carrier', 'carrier_name']);
-    
-    // Email
-    info.email = findValue(data, ['email', 'mail', 'email_id', 'emailaddress']);
-    
-    // ID Proofs
-    info.aadhar = findValue(data, ['aadhar', 'aadhaar', 'uid', 'aadhar_number']);
-    info.pan = findValue(data, ['pan', 'pan_number', 'pancard']);
-    
-    // Personal
-    info.dob = findValue(data, ['dob', 'date_of_birth', 'birth_date', 'birthday', 'DOB']);
-    info.age = findValue(data, ['age', 'person_age']);
-    info.gender = findValue(data, ['gender', 'sex']);
-    info.occupation = findValue(data, ['occupation', 'profession', 'job', 'work']);
-    
-    // Other
-    info.company = findValue(data, ['company', 'organization', 'employer', 'business']);
-    info.vehicle = findValue(data, ['vehicle', 'car', 'bike', 'vehicle_number', 'registration']);
-    info.upi = findValue(data, ['upi', 'paytm', 'googlepay', 'phonepe', 'gpay']);
-    info.social = findValue(data, ['social', 'instagram', 'facebook', 'twitter', 'social_media']);
+    info.motherName = findValue(data, ['mother_name', 'mother', 'mothername', 'm_name', 'Mother', 'MotherName', 'Mother_Name', 'mothersName', 'mothers_name', 'MotherFullName', 'mother_full_name']);
+    info.address = findValue(data, ['address', 'full_address', 'street', 'area', 'locality', 'address_line', 'resident_address', 'permanent_address', 'current_address', 'Address', 'FullAddress']);
+    info.city = findValue(data, ['city', 'town', 'district', 'tehsil', 'municipality', 'City', 'District', 'Town']);
+    info.state = findValue(data, ['state', 'province', 'region', 'division', 'State', 'Province']);
+    info.country = findValue(data, ['country', 'nation', 'country_name', 'Country', 'Nation']);
+    info.pincode = findValue(data, ['pincode', 'zip', 'postal_code', 'zipcode', 'pin', 'Pincode', 'PinCode', 'ZipCode']);
+    info.sim = findValue(data, ['sim', 'sim_operator', 'simoperator', 'sim_name', 'SimOperator', 'SimName']);
+    info.operator = findValue(data, ['operator', 'network', 'service_provider', 'provider', 'mobile_operator', 'telco', 'isp', 'Operator', 'Network']);
+    info.carrier = findValue(data, ['carrier', 'carrier_name', 'Carrier', 'CarrierName']);
+    info.email = findValue(data, ['email', 'mail', 'email_id', 'emailaddress', 'Email', 'Mail', 'EmailID']);
+    info.aadhar = findValue(data, ['aadhar', 'aadhaar', 'uid', 'aadhar_number', 'Aadhar', 'Aadhaar', 'UID']);
+    info.pan = findValue(data, ['pan', 'pan_number', 'pancard', 'PAN', 'PanCard', 'PanNumber']);
+    info.dob = findValue(data, ['dob', 'date_of_birth', 'birth_date', 'birthday', 'DOB', 'DateOfBirth', 'BirthDate']);
+    info.age = findValue(data, ['age', 'person_age', 'Age', 'PersonAge']);
+    info.gender = findValue(data, ['gender', 'sex', 'Gender', 'Sex']);
+    info.occupation = findValue(data, ['occupation', 'profession', 'job', 'work', 'Occupation', 'Profession']);
+    info.company = findValue(data, ['company', 'organization', 'employer', 'business', 'Company', 'Organization']);
+    info.vehicle = findValue(data, ['vehicle', 'car', 'bike', 'vehicle_number', 'registration', 'Vehicle']);
+    info.upi = findValue(data, ['upi', 'paytm', 'googlepay', 'phonepe', 'gpay', 'UPI', 'Paytm']);
+    info.social = findValue(data, ['social', 'instagram', 'facebook', 'twitter', 'social_media', 'Social']);
     
     return info;
 }
 
-// Display information in beautiful format
 function displayInfo(info, number) {
     let html = `<div class="result-card">
         <h3 style="margin-bottom: 15px; text-align: center;">📋 COMPLETE NUMBER INFORMATION</h3>`;
     
-    // Phone Number (always show)
     if(info.phone || number) {
-        html += `<div class="info-line">
-            <span class="info-icon">📞</span>
-            <span class="info-label">PHONE =</span>
-            <span class="info-value">${info.phone || number}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">📞</span><span class="info-label">PHONE =</span><span class="info-value">${info.phone || number}</span></div>`;
     }
-    
-    // Name
     if(info.name) {
-        html += `<div class="info-line">
-            <span class="info-icon">❤️</span>
-            <span class="info-label">NAME =</span>
-            <span class="info-value">${info.name}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">❤️</span><span class="info-label">NAME =</span><span class="info-value" style="color: #fff; font-weight: bold;">${info.name}</span></div>`;
     }
-    
-    // Father Name
     if(info.fatherName) {
-        html += `<div class="info-line">
-            <span class="info-icon">🤯</span>
-            <span class="info-label">FATHER NAME =</span>
-            <span class="info-value">${info.fatherName}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">👨</span><span class="info-label">FATHER NAME =</span><span class="info-value" style="color: #a8ff78; font-weight: bold;">${info.fatherName}</span></div>`;
     }
-    
-    // Mother Name (if available)
     if(info.motherName) {
-        html += `<div class="info-line">
-            <span class="info-icon">👩</span>
-            <span class="info-label">MOTHER NAME =</span>
-            <span class="info-value">${info.motherName}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">👩</span><span class="info-label">MOTHER NAME =</span><span class="info-value" style="color: #ffb6c1;">${info.motherName}</span></div>`;
     }
     
-    // Address
     let fullAddress = [];
     if(info.address) fullAddress.push(info.address);
     if(info.city) fullAddress.push(info.city);
@@ -502,143 +1204,62 @@ function displayInfo(info, number) {
     if(info.pincode) fullAddress.push(info.pincode);
     
     if(fullAddress.length > 0) {
-        html += `<div class="info-line">
-            <span class="info-icon">🦁</span>
-            <span class="info-label">ADDRESS =</span>
-            <span class="info-value">${fullAddress.join(', ')}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">🦁</span><span class="info-label">ADDRESS =</span><span class="info-value">${fullAddress.join(', ')}</span></div>`;
     }
     
-    // SIM / Operator / Carrier
     let simInfo = info.sim || info.operator || info.carrier;
     if(simInfo) {
-        html += `<div class="info-line">
-            <span class="info-icon">💯</span>
-            <span class="info-label">SIM =</span>
-            <span class="info-value">${simInfo}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">💯</span><span class="info-label">SIM =</span><span class="info-value">${simInfo}</span></div>`;
     }
-    
-    // Email
     if(info.email) {
-        html += `<div class="info-line">
-            <span class="info-icon">📧</span>
-            <span class="info-label">EMAIL =</span>
-            <span class="info-value">${info.email}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">📧</span><span class="info-label">EMAIL =</span><span class="info-value">${info.email}</span></div>`;
     }
-    
-    // DOB & Age
     if(info.dob) {
-        html += `<div class="info-line">
-            <span class="info-icon">🎂</span>
-            <span class="info-label">DOB =</span>
-            <span class="info-value">${info.dob} ${info.age ? '(Age: ' + info.age + ')' : ''}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">🎂</span><span class="info-label">DOB =</span><span class="info-value">${info.dob} ${info.age ? '(Age: ' + info.age + ')' : ''}</span></div>`;
     } else if(info.age) {
-        html += `<div class="info-line">
-            <span class="info-icon">🎂</span>
-            <span class="info-label">AGE =</span>
-            <span class="info-value">${info.age}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">🎂</span><span class="info-label">AGE =</span><span class="info-value">${info.age}</span></div>`;
     }
-    
-    // Gender
     if(info.gender) {
-        html += `<div class="info-line">
-            <span class="info-icon">👤</span>
-            <span class="info-label">GENDER =</span>
-            <span class="info-value">${info.gender}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">👤</span><span class="info-label">GENDER =</span><span class="info-value">${info.gender}</span></div>`;
     }
-    
-    // Occupation
     if(info.occupation) {
-        html += `<div class="info-line">
-            <span class="info-icon">💼</span>
-            <span class="info-label">OCCUPATION =</span>
-            <span class="info-value">${info.occupation}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">💼</span><span class="info-label">OCCUPATION =</span><span class="info-value">${info.occupation}</span></div>`;
     }
-    
-    // Company
     if(info.company) {
-        html += `<div class="info-line">
-            <span class="info-icon">🏢</span>
-            <span class="info-label">COMPANY =</span>
-            <span class="info-value">${info.company}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">🏢</span><span class="info-label">COMPANY =</span><span class="info-value">${info.company}</span></div>`;
     }
-    
-    // Vehicle
     if(info.vehicle) {
-        html += `<div class="info-line">
-            <span class="info-icon">🚗</span>
-            <span class="info-label">VEHICLE =</span>
-            <span class="info-value">${info.vehicle}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">🚗</span><span class="info-label">VEHICLE =</span><span class="info-value">${info.vehicle}</span></div>`;
     }
-    
-    // UPI
     if(info.upi) {
-        html += `<div class="info-line">
-            <span class="info-icon">💳</span>
-            <span class="info-label">UPI =</span>
-            <span class="info-value">${info.upi}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">💳</span><span class="info-label">UPI =</span><span class="info-value">${info.upi}</span></div>`;
     }
-    
-    // Aadhar / PAN
     if(info.aadhar) {
-        html += `<div class="info-line">
-            <span class="info-icon">🆔</span>
-            <span class="info-label">AADHAR =</span>
-            <span class="info-value">${info.aadhar}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">🆔</span><span class="info-label">AADHAR =</span><span class="info-value">${info.aadhar}</span></div>`;
     }
-    
     if(info.pan) {
-        html += `<div class="info-line">
-            <span class="info-icon">📄</span>
-            <span class="info-label">PAN =</span>
-            <span class="info-value">${info.pan}</span>
-        </div>`;
+        html += `<div class="info-line"><span class="info-icon">📄</span><span class="info-label">PAN =</span><span class="info-value">${info.pan}</span></div>`;
     }
     
-    // Check if any data was found
-    const hasData = info.name || info.fatherName || info.address || simInfo || info.email || info.dob || info.gender;
+    const hasData = info.name || info.fatherName || info.motherName || info.address || simInfo || info.email || info.dob || info.gender;
     
     if(!hasData) {
-        html += `<div style="text-align: center; padding: 20px;">
-            <span style="color: #ff9800;">⚠️ No information found for this number in the API response</span>
-            <br><br>
-            <span style="font-size: 12px; opacity: 0.7;">💡 Try opening in API directly to see raw response</span>
-        </div>`;
+        html += `<div style="text-align: center; padding: 20px;"><span style="color: #ff9800;">⚠️ No information found for this number in the API response</span><br><br><span style="font-size: 12px; opacity: 0.7;">💡 Try opening in API directly to see raw response</span></div>`;
         document.getElementById('openApiBtn').style.display = 'block';
     } else {
         document.getElementById('openApiBtn').style.display = 'none';
     }
     
-    html += `<div class="raw-data-toggle">
-        <button onclick="toggleRawData()">📄 Show Raw API Data</button>
-    </div>
-    <div id="rawJson" class="raw-json">
-        <pre style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; font-size: 10px; overflow-x: auto;">${JSON.stringify(lastRawData, null, 2)}</pre>
-    </div>`;
-    
-    html += `</div>`;
+    html += `<div class="raw-data-toggle"><button onclick="toggleRawData()">📄 Show Raw API Data</button></div>
+    <div id="rawJson" class="raw-json"><pre style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; font-size: 10px; overflow-x: auto; max-height: 300px;">${JSON.stringify(lastRawData, null, 2)}</pre></div></div>`;
     return html;
 }
 
-// Toggle raw data display
 function toggleRawData() {
     const rawDiv = document.getElementById('rawJson');
-    if(rawDiv) {
-        rawDiv.classList.toggle('show');
-    }
+    if(rawDiv) rawDiv.classList.toggle('show');
 }
 
-// Open number in API directly
 function openInAPI() {
     const number = document.getElementById('phoneNumber').value.trim();
     if(!number) {
@@ -648,7 +1269,6 @@ function openInAPI() {
     window.open(API_URL + encodeURIComponent(number), '_blank');
 }
 
-// Verify phone number
 async function verifyNumber() {
     const number = document.getElementById('phoneNumber').value.trim();
     const resultDiv = document.getElementById('result');
@@ -665,28 +1285,15 @@ async function verifyNumber() {
     try {
         const response = await fetch(API_URL + encodeURIComponent(number));
         const data = await response.json();
-        
         lastRawData = data;
-        
-        // Extract all information
         const extractedInfo = extractAllInfo(data);
-        
-        // Display beautifully
         resultDiv.innerHTML = displayInfo(extractedInfo, number);
-        
     } catch(err) {
-        resultDiv.innerHTML = `
-            <div class="result-card" style="border-color: #ff9800;">
-                <h3 style="color: #ff9800;">⚠️ API Connection Issue</h3>
-                <p>Error: ${err.message}</p>
-                <p style="margin-top: 10px;">👇 Try opening directly in API:</p>
-            </div>
-        `;
+        resultDiv.innerHTML = `<div class="result-card" style="border-color: #ff9800;"><h3 style="color: #ff9800;">⚠️ API Connection Issue</h3><p>Error: ${err.message}</p><p style="margin-top: 10px;">👇 Try opening directly in API:</p></div>`;
         openApiBtn.style.display = 'block';
     }
 }
 
-// Handle login
 function handleLogin() {
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
@@ -718,7 +1325,6 @@ function showApp() {
     document.getElementById('loginSection').style.display = 'none';
     document.getElementById('appSection').style.display = 'block';
     document.getElementById('userBadge').innerHTML = `✅ Logged in as: <strong>${currentUserType === 'normal' ? NORMAL_USER.username : ADMIN_USER.username}</strong>`;
-    
     if(currentUserType === 'admin') {
         document.getElementById('adminPanel').style.display = 'block';
     }
@@ -732,11 +1338,7 @@ function logout() {
     document.getElementById('loginPassword').value = '';
     document.getElementById('phoneNumber').value = '';
     document.getElementById('openApiBtn').style.display = 'none';
-    document.getElementById('result').innerHTML = `
-        <div class="result-card" style="text-align: center; opacity: 0.7;">
-            ✨ Enter a number to get details
-        </div>
-    `;
+    document.getElementById('result').innerHTML = `<div class="result-card" style="text-align: center; opacity: 0.7;">✨ Enter a number to get details</div>`;
 }
 
 function updateBackground() {
@@ -747,11 +1349,10 @@ function updateBackground() {
     }
     localStorage.setItem("global_background_url", posterUrl);
     document.getElementById("bgImage").src = posterUrl;
+    loadBannerImage(posterUrl);
     document.getElementById('adminMsg').innerHTML = '<span class="success-msg">✅ Background updated!</span>';
     document.getElementById('posterUrl').value = '';
-    setTimeout(() => {
-        document.getElementById('adminMsg').innerHTML = '';
-    }, 3000);
+    setTimeout(() => { document.getElementById('adminMsg').innerHTML = ''; }, 3000);
 }
 
 // Event listeners
@@ -773,7 +1374,24 @@ document.getElementById('phoneNumber').addEventListener('keypress', function(e) 
     if(e.key === 'Enter') verifyNumber();
 });
 
-loadBackground();
+// Keyboard shortcut for music (M key)
+document.addEventListener('keydown', function(e) {
+    if(e.key === 'm' || e.key === 'M') {
+        if(!e.target.matches('input')) {
+            toggleMusic();
+        }
+    }
+});
+
+window.addEventListener('load', function() {
+    loadBackground();
+    
+    // Apply saved theme
+    changeTheme(currentTheme);
+    
+    // Initialize volume
+    bgMusic.volume = document.getElementById('volumeSlider').value / 100;
+});
 </script>
 
 </body>
