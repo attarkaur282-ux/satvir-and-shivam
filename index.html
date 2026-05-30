@@ -290,7 +290,7 @@ function genDisplayId(){let id='';for(let i=0;i<10;i++){id+=Math.floor(Math.rand
 function getDB(){let raw=localStorage.getItem('numberInfoDB');if(!raw){let db={users:{"1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:[],following:[],isAdmin:true,createdAt:new Date().toISOString(),dp:"",banned:false,displayId:genDisplayId(),online:false}},userIdCounter:11111112,emails:{"admin@pro.com":"1"},messages:{},chats:{},bans:{},liveUsers:{},onlineUsers:{}};saveDB(db);return db;}let db=JSON.parse(raw);let updated=false;for(let uid in db.users){if(!db.users[uid].displayId){db.users[uid].displayId=genDisplayId();updated=true;}if(db.users[uid].shortId!==undefined){delete db.users[uid].shortId;updated=true;}if(!db.users[uid].followers)db.users[uid].followers=[];if(!db.users[uid].following)db.users[uid].following=[];if(db.users[uid].online===undefined)db.users[uid].online=false;}if(!db.liveUsers)db.liveUsers={};if(!db.onlineUsers)db.onlineUsers={};if(updated)saveDB(db);return db;}
 function saveDB(db){localStorage.setItem('numberInfoDB',JSON.stringify(db));}
 let currentUser=null,currentChatPartner=null,chatRefreshInterval=null,lastRawData=null;
-const API_URL="https://pawan-osint.vercel.app/api?apikey=toxicadminn&number=",DEFAULT_BG="https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
+const API_URL="https://numosintapi.vercel.app/api/number-info?number=",DEFAULT_BG="https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
 const searchCache={};
 
 // ==================== ONLINE STATUS ====================
