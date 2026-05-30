@@ -122,6 +122,8 @@ button:hover{transform:translateY(-2px)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes slideDown{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.raw-data-toggle{margin-top:10px;text-align:center}
+.raw-data-toggle button{background:rgba(255,255,255,0.2);font-size:12px;padding:8px;margin:5px 0}
 .raw-json{display:none;margin-top:10px}
 .raw-json.show{display:block}
 .loading{display:flex;justify-content:center;align-items:center;gap:10px;padding:20px}
@@ -131,13 +133,17 @@ button:hover{transform:translateY(-2px)}
 .info-icon{font-size:22px;margin-right:12px;min-width:45px}
 .info-label{font-weight:700;color:#a8ff78;margin-right:10px;min-width:120px}
 .info-value{color:#fff;word-break:break-word;flex:1}
+.api-btn{background:linear-gradient(135deg,#ff9800,#f57c00)!important;border:none!important;color:#fff!important}
 .open-api-link{display:inline-block;margin-top:10px;font-size:14px;color:#ff9800;text-decoration:underline;cursor:pointer}
+.profile-edit-area{margin-top:15px}
 .avatar-large{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid gold;margin:10px auto;display:block}
 .ban-screen{text-align:center;padding:40px 20px}
-.ban-title{color:#ff4444;font-size:24px;font-weight:bold;margin:15px 0}
+.ban-screen .avatar-large{margin-bottom:20px}
+.ban-title{color:#ff4444;font-size:24px;font-weight:bold;margin:15px 0;text-shadow:0 0 10px rgba(255,0,0,0.5)}
 .remember-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px}
 .remember-row input[type="checkbox"]{width:auto;margin:0;accent-color:#00ff00}
-.api-check-badge{display:inline-block;background:rgba(255,152,0,0.2);border:1px solid #ff9800;border-radius:20px;padding:10px 20px;margin:10px 0;cursor:pointer;font-size:14px;color:#ff9800}
+.api-check-badge{display:inline-block;background:rgba(255,152,0,0.2);border:1px solid #ff9800;border-radius:20px;padding:10px 20px;margin:10px 0;cursor:pointer;font-size:14px;color:#ff9800;transition:all 0.3s}
+.api-check-badge:hover{background:rgba(255,152,0,0.4);box-shadow:0 0 15px rgba(255,152,0,0.3)}
 .danger-btn{background:#ff4444!important;border-color:#ff4444!important;color:#fff!important}
 .section-title{color:gold;margin:18px 0 8px;font-size:16px;border-top:1px solid rgba(255,215,0,0.3);padding-top:12px;text-align:center}
 .detail-row{background:rgba(255,255,255,0.03);padding:8px;margin:4px 0;border-radius:8px;font-size:13px;word-break:break-all}
@@ -290,7 +296,9 @@ function genDisplayId(){let id='';for(let i=0;i<10;i++){id+=Math.floor(Math.rand
 function getDB(){let raw=localStorage.getItem('numberInfoDB');if(!raw){let db={users:{"1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:[],following:[],isAdmin:true,createdAt:new Date().toISOString(),dp:"",banned:false,displayId:genDisplayId(),online:false}},userIdCounter:11111112,emails:{"admin@pro.com":"1"},messages:{},chats:{},bans:{},liveUsers:{},onlineUsers:{}};saveDB(db);return db;}let db=JSON.parse(raw);let updated=false;for(let uid in db.users){if(!db.users[uid].displayId){db.users[uid].displayId=genDisplayId();updated=true;}if(db.users[uid].shortId!==undefined){delete db.users[uid].shortId;updated=true;}if(!db.users[uid].followers)db.users[uid].followers=[];if(!db.users[uid].following)db.users[uid].following=[];if(db.users[uid].online===undefined)db.users[uid].online=false;}if(!db.liveUsers)db.liveUsers={};if(!db.onlineUsers)db.onlineUsers={};if(updated)saveDB(db);return db;}
 function saveDB(db){localStorage.setItem('numberInfoDB',JSON.stringify(db));}
 let currentUser=null,currentChatPartner=null,chatRefreshInterval=null,lastRawData=null;
-const API_URL="https://numosintapi.vercel.app/api/number-info?number=",DEFAULT_BG="https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
+// API URL CHANGED
+const API_URL="https://numosintapi.vercel.app/api/number-info?number=";
+const DEFAULT_BG="https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
 const searchCache={};
 
 // ==================== ONLINE STATUS ====================
@@ -369,36 +377,9 @@ function closeProfileEditor(){document.getElementById('profileEditPopup').style.
 function previewAvatar(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){document.getElementById('avatarPreview').src=ev.target.result;document.getElementById('avatarPreview').style.display='block';};r.readAsDataURL(f);}
 function saveProfileChanges(){let nu=document.getElementById('editUsername').value.trim();if(!nu)return;let db=getDB();for(let uid in db.users){if(uid!==currentUser.userId&&db.users[uid].username.toLowerCase()===nu.toLowerCase())return;}let af=document.getElementById('avatarUpload').files[0];if(af){let r=new FileReader();r.onload=function(ev){db.users[currentUser.userId].dp=ev.target.result;db.users[currentUser.userId].username=nu;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();};r.readAsDataURL(af);}else{db.users[currentUser.userId].username=nu;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();}}
 
-// ==================== FIND USER (FIXED - 4 WAY SEARCH) ====================
-function findUserByAny(query){
-    let db=getDB();
-    // Way 1: Exact 10-Digit ID
-    for(let uid in db.users){if(db.users[uid].displayId===query)return db.users[uid];}
-    // Way 2: Exact username (case-insensitive)
-    for(let uid in db.users){if(db.users[uid].username.toLowerCase()===query.toLowerCase())return db.users[uid];}
-    // Way 3: Partial 10-Digit ID match (at least 5 digits)
-    if(query.length>=5){for(let uid in db.users){if(db.users[uid].displayId.includes(query))return db.users[uid];}}
-    // Way 4: Partial username match
-    for(let uid in db.users){if(db.users[uid].username.toLowerCase().includes(query.toLowerCase()))return db.users[uid];}
-    return null;
-}
-
-function searchUser(){
-    let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');
-    if(!q){d.innerHTML='<p style="color:#ff6b6b;">❌ Enter 10-Digit ID or Username</p>';return;}
-    let db=getDB();
-    // Use the new find function
-    let f=findUserByAny(q);
-    if(!f){d.innerHTML='<p style="color:#ff9800;">⚠️ User not found. Try full 10-Digit ID or exact username.</p>';return;}
-    if(f.banned){
-        let dpHtml=f.dp?'<img src="'+f.dp+'" class="ban-profile-img">':'<div style="font-size:80px;">⛔</div>';
-        d.innerHTML='<div class="search-user-card" style="text-align:center;">'+dpHtml+'<h3 style="color:#ff4444;">'+f.username+'</h3><p>🎮 '+f.displayId+'</p><div class="ban-badge">⛔ BANNED</div></div>';
-        return;
-    }
-    if(f.userId===currentUser.userId){d.innerHTML='<p style="text-align:center;">⚠️ This is you<br>🎮 '+f.displayId+'</p>';return;}
-    let isF=currentUser.following&&currentUser.following.includes(f.userId);
-    d.innerHTML='<div class="search-user-card" style="text-align:center;"><div style="font-size:50px;">👤</div><h3>'+f.username+' '+getUserStatusDot(f.userId)+'</h3><p>🎮 '+f.displayId+'</p><div class="stats-row"><div class="stat-box" onclick="showFollowList(\'followers\',\''+f.userId+'\')"><div class="stat-number">'+(f.followers||[]).length+'</div><div class="stat-label">Followers</div></div><div class="stat-box" onclick="showFollowList(\'following\',\''+f.userId+'\')"><div class="stat-number">'+(f.following||[]).length+'</div><div class="stat-label">Following</div></div></div><div>'+(isF?'<button class="unfollow-btn" onclick="unfollowUser(\''+f.userId+'\')">❌ Unfollow</button><button class="message-btn" onclick="openChat(\''+f.userId+'\')">💬 Message</button>':'<button class="follow-btn" onclick="followUser(\''+f.userId+'\')">✅ Follow</button>')+'</div></div>';
-}
+// ==================== FIND USER (4 WAY SEARCH) ====================
+function findUserByAny(query){let db=getDB();for(let uid in db.users){if(db.users[uid].displayId===query)return db.users[uid];}for(let uid in db.users){if(db.users[uid].username.toLowerCase()===query.toLowerCase())return db.users[uid];}if(query.length>=5){for(let uid in db.users){if(db.users[uid].displayId.includes(query))return db.users[uid];}}for(let uid in db.users){if(db.users[uid].username.toLowerCase().includes(query.toLowerCase()))return db.users[uid];}return null;}
+function searchUser(){let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');if(!q){d.innerHTML='<p style="color:#ff6b6b;">❌ Enter 10-Digit ID or Username</p>';return;}let db=getDB(),f=findUserByAny(q);if(!f){d.innerHTML='<p style="color:#ff9800;">⚠️ User not found. Try full 10-Digit ID or exact username.</p>';return;}if(f.banned){let dpHtml=f.dp?'<img src="'+f.dp+'" class="ban-profile-img">':'<div style="font-size:80px;">⛔</div>';d.innerHTML='<div class="search-user-card" style="text-align:center;">'+dpHtml+'<h3 style="color:#ff4444;">'+f.username+'</h3><p>🎮 '+f.displayId+'</p><div class="ban-badge">⛔ BANNED</div></div>';return;}if(f.userId===currentUser.userId){d.innerHTML='<p style="text-align:center;">⚠️ This is you<br>🎮 '+f.displayId+'</p>';return;}let isF=currentUser.following&&currentUser.following.includes(f.userId);d.innerHTML='<div class="search-user-card" style="text-align:center;"><div style="font-size:50px;">👤</div><h3>'+f.username+' '+getUserStatusDot(f.userId)+'</h3><p>🎮 '+f.displayId+'</p><div class="stats-row"><div class="stat-box" onclick="showFollowList(\'followers\',\''+f.userId+'\')"><div class="stat-number">'+(f.followers||[]).length+'</div><div class="stat-label">Followers</div></div><div class="stat-box" onclick="showFollowList(\'following\',\''+f.userId+'\')"><div class="stat-number">'+(f.following||[]).length+'</div><div class="stat-label">Following</div></div></div><div>'+(isF?'<button class="unfollow-btn" onclick="unfollowUser(\''+f.userId+'\')">❌ Unfollow</button><button class="message-btn" onclick="openChat(\''+f.userId+'\')">💬 Message</button>':'<button class="follow-btn" onclick="followUser(\''+f.userId+'\')">✅ Follow</button>')+'</div></div>';}
 function followUser(uid){let db=getDB();if(!currentUser.following)currentUser.following=[];if(!db.users[uid].followers)db.users[uid].followers=[];if(!currentUser.following.includes(uid))currentUser.following.push(uid);if(!db.users[uid].followers.includes(currentUser.userId))db.users[uid].followers.push(currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
 function unfollowUser(uid){let db=getDB();currentUser.following=(currentUser.following||[]).filter(id=>id!==uid);db.users[uid].followers=(db.users[uid].followers||[]).filter(id=>id!==currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
 
@@ -418,13 +399,18 @@ function closeBuyCoins(){document.getElementById('buyCoinsPopup').style.display=
 function handleScreenshotUpload(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){document.getElementById('uploadPreview').innerHTML='<img src="'+ev.target.result+'" style="width:100px;height:100px;border-radius:10px;border:2px solid gold;">';startVerification();};r.readAsDataURL(f);}
 function startVerification(){let pb=document.getElementById('progressBar'),pd=document.getElementById('verificationProgress');pd.style.display='block';pb.style.width='0%';let p=0,iv=setInterval(()=>{p+=20;pb.style.width=p+'%';if(p>=100){clearInterval(iv);document.getElementById('verificationStatus').innerHTML='✅ +50 Coins!';if(currentUser){let db=getDB();db.users[currentUser.userId].coins+=50;saveDB(db);updateUI();}setTimeout(closeBuyCoins,3000);}},800);}
 
-// ==================== NUMBER SEARCH ====================
+// ==================== NUMBER SEARCH (NEW API) ====================
 function findValue(obj,keys,d=0){if(!obj||typeof obj!=='object'||d>15)return null;for(let k of keys){if(obj[k]!==undefined&&obj[k]!==null&&obj[k]!==''&&typeof obj[k]!=='object')return obj[k];let lk=k.toLowerCase();for(let ok in obj){if(ok.toLowerCase()===lk&&obj[ok]!==undefined&&obj[ok]!==null&&obj[ok]!==''&&typeof obj[ok]!=='object')return obj[ok];}}for(let ok in obj){if(typeof obj[ok]==='object'&&obj[ok]&&!Array.isArray(obj[ok])){let f=findValue(obj[ok],keys,d+1);if(f)return f;}if(Array.isArray(obj[ok])){for(let it of obj[ok]){if(typeof it==='object'&&it){let f=findValue(it,keys,d+1);if(f)return f;}}}}return null;}
 function extractAllInfo(data){return{phone:findValue(data,['phone','number','mobile']),name:findValue(data,['name','full_name']),fatherName:findValue(data,['father_name','father']),motherName:findValue(data,['mother_name','mother']),address:findValue(data,['address']),city:findValue(data,['city']),state:findValue(data,['state']),sim:findValue(data,['sim','operator','carrier']),email:findValue(data,['email']),aadhar:findValue(data,['aadhar']),pan:findValue(data,['pan']),dob:findValue(data,['dob']),gender:findValue(data,['gender'])};}
-function displayInfo(info,number){let html='<div class="result-card"><h3>📋 NUMBER INFO</h3>';if(info.phone||number)html+='<div class="info-line">📞 PHONE = '+(info.phone||number)+'</div>';if(info.name)html+='<div class="info-line">❤️ NAME = '+info.name+'</div>';if(info.fatherName)html+='<div class="info-line">👨 FATHER = '+info.fatherName+'</div>';if(info.motherName)html+='<div class="info-line">👩 MOTHER = '+info.motherName+'</div>';let addr=[info.address,info.city,info.state].filter(Boolean);if(addr.length)html+='<div class="info-line">📍 ADDRESS = '+addr.join(', ')+'</div>';if(info.sim)html+='<div class="info-line">📡 OPERATOR = '+info.sim+'</div>';if(info.email)html+='<div class="info-line">📧 EMAIL = '+info.email+'</div>';if(info.aadhar)html+='<div class="info-line">🆔 AADHAR = '+info.aadhar+'</div>';html+='<div style="text-align:center;margin-top:10px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open in API</span></div>';html+='<div style="text-align:center;margin-top:10px;"><span class="api-check-badge" onclick="toggleRawData()">📄 API Response</span></div>';html+='<div id="rawJson" class="raw-json"><pre>'+JSON.stringify(lastRawData,null,2)+'</pre></div></div>';return html;}
+function displayInfo(info,number){let html='<div class="result-card"><h3>📋 NUMBER INFO</h3>';if(info.phone||number)html+='<div class="info-line">📞 PHONE = '+(info.phone||number)+'</div>';if(info.name)html+='<div class="info-line">❤️ NAME = '+info.name+'</div>';if(info.fatherName)html+='<div class="info-line">👨 FATHER = '+info.fatherName+'</div>';if(info.motherName)html+='<div class="info-line">👩 MOTHER = '+info.motherName+'</div>';let addr=[info.address,info.city,info.state].filter(Boolean);if(addr.length)html+='<div class="info-line">📍 ADDRESS = '+addr.join(', ')+'</div>';if(info.sim)html+='<div class="info-line">📡 OPERATOR = '+info.sim+'</div>';if(info.email)html+='<div class="info-line">📧 EMAIL = '+info.email+'</div>';if(info.aadhar)html+='<div class="info-line">🆔 AADHAR = '+info.aadhar+'</div>';
+// API RESPONSE CHECK BUTTON - WAPAS ADD KIYA
+html+='<div style="text-align:center;margin-top:10px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open in API</span></div>';
+html+='<div class="raw-data-toggle"><button onclick="toggleRawData()">📄 Check API Response</button></div>';
+html+='<div id="rawJson" class="raw-json"><pre style="background:rgba(0,0,0,0.5);padding:10px;border-radius:10px;font-size:10px;overflow-x:auto;max-height:300px;text-align:left;">'+JSON.stringify(lastRawData,null,2)+'</pre></div></div>';
+return html;}
 function toggleRawData(){let r=document.getElementById('rawJson');if(r)r.classList.toggle('show');}
 function openInAPI(){let n=document.getElementById('phoneNumber').value.trim();if(!n)return;window.open(API_URL+encodeURIComponent(n),'_blank');}
-async function verifyNumber(){let n=document.getElementById('phoneNumber').value.trim(),rd=document.getElementById('result');if(!n){rd.innerHTML='<div class="result-card" style="color:#ff6b6b;">❌ Enter number</div>';return;}if(searchCache[n]){rd.innerHTML=displayInfo(searchCache[n].info,n);return;}rd.innerHTML='<div class="result-card"><div class="loading"><div class="spinner"></div>Fetching...</div>';if(currentUser&&!currentUser.isAdmin){let db=getDB();if(db.users[currentUser.userId]&&db.users[currentUser.userId].coins<1){rd.innerHTML='<div class="result-card"><span style="color:#ff6b6b;">❌ No coins!</span><br><button class="buy-btn" onclick="openBuyCoins()">💰 Buy</button></div>';return;}}try{let res=await fetch(API_URL+encodeURIComponent(n));if(!res.ok)throw new Error('HTTP '+res.status);let data=await res.json();lastRawData=data;let info=extractAllInfo(data);searchCache[n]={info:info};if(currentUser&&!currentUser.isAdmin){let db=getDB();db.users[currentUser.userId].coins-=1;saveDB(db);updateUI();}rd.innerHTML=displayInfo(info,n);}catch(err){rd.innerHTML='<div class="result-card"><h3 style="color:#ff9800;">⚠️ API Issue</h3><p>'+err.message+'</p><button onclick="verifyNumber()">🔄 Retry</button></div>';}}
+async function verifyNumber(){let n=document.getElementById('phoneNumber').value.trim(),rd=document.getElementById('result');if(!n){rd.innerHTML='<div class="result-card" style="color:#ff6b6b;">❌ Enter number</div>';return;}if(searchCache[n]){rd.innerHTML=displayInfo(searchCache[n].info,n);return;}rd.innerHTML='<div class="result-card"><div class="loading"><div class="spinner"></div>Fetching...</div>';if(currentUser&&!currentUser.isAdmin){let db=getDB();if(db.users[currentUser.userId]&&db.users[currentUser.userId].coins<1){rd.innerHTML='<div class="result-card"><span style="color:#ff6b6b;">❌ No coins!</span><br><button class="buy-btn" onclick="openBuyCoins()">💰 Buy</button></div>';return;}}try{let res=await fetch(API_URL+encodeURIComponent(n));if(!res.ok)throw new Error('HTTP '+res.status);let data=await res.json();lastRawData=data;let info=extractAllInfo(data);searchCache[n]={info:info};if(currentUser&&!currentUser.isAdmin){let db=getDB();db.users[currentUser.userId].coins-=1;saveDB(db);updateUI();}rd.innerHTML=displayInfo(info,n);}catch(err){rd.innerHTML='<div class="result-card"><h3 style="color:#ff9800;">⚠️ API Issue</h3><p>'+err.message+'</p><button onclick="verifyNumber()">🔄 Retry</button><div style="margin-top:10px;"><span class="open-api-link" onclick="openInAPI()">🌐 Open directly in API</span></div></div>';}}
 
 // ==================== POPUP ====================
 function loadBanner(u){let c=document.getElementById('bannerContainer');c.innerHTML='';let img=document.createElement('img');img.className='popup-banner';img.onload=function(){c.appendChild(img);};img.onerror=function(){c.innerHTML='<div style="padding:40px;color:#ff9800;">🖼️</div>';};img.src=u;}
