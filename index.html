@@ -88,7 +88,7 @@ button:hover{transform:translateY(-2px)}
 .coin-icon{font-size:24px}
 .buy-btn{background:linear-gradient(135deg,#FFD700,#FFA500)!important;color:#000!important;font-size:14px!important;padding:8px 20px!important;width:auto!important;margin:0!important;border:none!important}
 .nav-tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-.nav-tab{flex:1;min-width:60px;padding:10px 4px;font-size:11px;margin:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;cursor:pointer;color:#fff;text-align:center}
+.nav-tab{flex:1;min-width:55px;padding:10px 3px;font-size:10px;margin:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;cursor:pointer;color:#fff;text-align:center}
 .nav-tab.active{background:linear-gradient(135deg,#4CAF50,#45a049);border-color:transparent}
 .search-user-card{background:rgba(255,255,255,0.05);border-radius:20px;padding:20px;margin:15px 0;border:1px solid rgba(255,255,255,0.2);cursor:pointer}
 .follow-btn{background:linear-gradient(135deg,#2196F3,#1976D2)!important;width:auto!important;padding:10px 30px!important;font-size:14px!important;border:none!important}
@@ -102,7 +102,7 @@ button:hover{transform:translateY(-2px)}
 .chat-time{font-size:10px;opacity:0.7;margin-top:5px}
 .chat-input-area{display:flex;gap:10px;margin-top:10px}
 .chat-input-area input{flex:1;margin:0}
-.chat-input-area button{width:auto!important;margin:0!important;padding:14px 25px!important;background:#4CAF50!important;border:none!important;color:#fff!important}
+.chat-input-area button{width:auto!important;margin:0!important;padding:14px 25px!important;background:#00cc00!important;border:none!important;color:#000!important;font-weight:900!important}
 .popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:9999;display:flex;justify-content:center;align-items:center;animation:fadeIn 0.5s ease;overflow-y:auto;padding:20px}
 .popup-content{background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);border-radius:20px;padding:25px;max-width:500px;width:95%;text-align:center;border:2px solid rgba(255,255,255,0.3);box-shadow:0 25px 50px rgba(0,0,0,0.5);animation:slideUp 0.5s ease}
 .popup-btn{padding:15px 40px;font-size:18px;font-weight:700;border:none;border-radius:50px;background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff;cursor:pointer;width:auto;display:inline-block;margin:5px}
@@ -207,7 +207,6 @@ button:hover{transform:translateY(-2px)}
 
 <div class="popup-overlay" id="bannerPopup"><div class="popup-content"><div class="popup-banner-container" id="bannerContainer"></div><h2 class="popup-title">🔥 Number Info PRO</h2><p class="popup-subtitle">Complete Phone Number OSINT Intelligence Tool</p><button class="popup-btn" onclick="closeBannerPopup()">👇 Tap to Continue 👇</button></div></div>
 
-<!-- FOLLOW LIST POPUP -->
 <div class="popup-overlay" id="followListPopup" style="display:none;">
     <div class="popup-content" style="max-width:450px;max-height:80vh;overflow-y:auto;text-align:left;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;"><h3 id="followListTitle">List</h3><button class="popup-btn" onclick="closeFollowList()" style="background:#dc3545;margin:0;">❌</button></div>
@@ -262,7 +261,7 @@ button:hover{transform:translateY(-2px)}
 
 <div class="popup-overlay" id="buyCoinsPopup" style="display:none;"><div class="popup-content"><h3>💰 Buy Coins</h3><img src="https://image-link.edgeone.app/1780049055586-zxq5eq.jpg" alt="QR" style="width:200px;height:200px;border-radius:15px;border:3px solid gold;"><input type="file" id="screenshotUpload" accept="image/*" onchange="handleScreenshotUpload(event)"><div id="uploadPreview"></div><div id="verificationProgress" style="display:none;height:5px;background:rgba(255,255,255,0.2);border-radius:10px;margin:10px 0;"><div id="progressBar" style="height:100%;background:#4CAF50;width:0%;border-radius:10px;"></div></div><p id="verificationStatus"></p><button class="popup-btn" onclick="closeBuyCoins()">❌ Close</button></div></div>
 <div class="popup-overlay" id="profileEditPopup" style="display:none;"><div class="popup-content"><h3>✏️ Edit</h3><input type="file" id="avatarUpload" accept="image/*" onchange="previewAvatar(event)"><img id="avatarPreview" class="avatar-large" src="" style="display:none;"><input type="text" id="editUsername" placeholder="New Username"><button onclick="saveProfileChanges()">💾 Save</button><p id="editProfileMsg"></p><button class="popup-btn" onclick="closeProfileEditor()">❌ Cancel</button></div></div>
-<div class="popup-overlay" id="chatPopup" style="display:none;"><div class="popup-content" style="text-align:left;"><div style="display:flex;justify-content:space-between;margin-bottom:15px;"><h3 id="chatPartnerName">Chat</h3><button class="popup-btn" onclick="closeChat()" style="background:#dc3545;margin:0;">❌</button></div><div class="chat-container" id="chatMessages"></div><div class="chat-input-area"><input type="text" id="chatMessageInput" placeholder="Type message..."><button onclick="sendChatMsg()" style="background:#4CAF50!important;border:none!important;color:#fff!important;font-size:20px!important;">📤</button></div></div></div>
+<div class="popup-overlay" id="chatPopup" style="display:none;"><div class="popup-content" style="text-align:left;"><div style="display:flex;justify-content:space-between;margin-bottom:15px;"><h3 id="chatPartnerName">Chat</h3><button class="popup-btn" onclick="closeChat()" style="background:#dc3545;margin:0;">❌</button></div><div class="chat-container" id="chatMessages"></div><div class="chat-input-area"><input type="text" id="chatMessageInput" placeholder="Type..."><button onclick="sendChatMsg()">📤 Send</button></div></div></div>
 
 <script>
 // ==================== THEME ====================
@@ -288,7 +287,7 @@ function changeVolume(v){bgMusic.volume=v/100;}
 
 // ==================== DATABASE ====================
 function genDisplayId(){return Math.floor(1000000000+Math.random()*9000000000).toString();}
-function getDB(){let raw=localStorage.getItem('numberInfoDB');if(!raw){let db={users:{"1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:["11111111","11111112"],following:["11111111","11111112"],isAdmin:true,createdAt:new Date().toISOString(),dp:"",banned:false,displayId:genDisplayId(),online:false},"11111111":{userId:"11111111",email:"demo@test.com",username:"demo",password:"demo123",coins:50,followers:["1"],following:["1","11111112"],createdAt:new Date().toISOString(),dp:"",banned:false,displayId:genDisplayId(),online:false},"11111112":{userId:"11111112",email:"test@test.com",username:"testuser",password:"test123",coins:50,followers:["1","11111111"],following:["1"],createdAt:new Date().toISOString(),dp:"",banned:false,displayId:genDisplayId(),online:false}},userIdCounter:11111112,emails:{"admin@pro.com":"1","demo@test.com":"11111111","test@test.com":"11111112"},messages:{},chats:{},bans:{},liveUsers:{},onlineUsers:{}};saveDB(db);return db;}let db=JSON.parse(raw);let updated=false;for(let uid in db.users){if(!db.users[uid].displayId){db.users[uid].displayId=genDisplayId();updated=true;}if(db.users[uid].shortId){delete db.users[uid].shortId;updated=true;}if(!db.users[uid].followers)db.users[uid].followers=[];if(!db.users[uid].following)db.users[uid].following=[];if(db.users[uid].online===undefined)db.users[uid].online=false;}if(!db.liveUsers)db.liveUsers={};if(!db.onlineUsers)db.onlineUsers={};if(updated)saveDB(db);return db;}
+function getDB(){let raw=localStorage.getItem('numberInfoDB');if(!raw){let db={users:{"1":{userId:"1",email:"admin@pro.com",username:"index.india",password:"index.india",coins:999999,followers:[],following:[],isAdmin:true,createdAt:new Date().toISOString(),dp:"",banned:false,displayId:genDisplayId(),online:false}},userIdCounter:11111112,emails:{"admin@pro.com":"1"},messages:{},chats:{},bans:{},liveUsers:{},onlineUsers:{}};saveDB(db);return db;}let db=JSON.parse(raw);let updated=false;for(let uid in db.users){if(!db.users[uid].displayId){db.users[uid].displayId=genDisplayId();updated=true;}if(db.users[uid].shortId!==undefined){delete db.users[uid].shortId;updated=true;}if(!db.users[uid].followers)db.users[uid].followers=[];if(!db.users[uid].following)db.users[uid].following=[];if(db.users[uid].online===undefined)db.users[uid].online=false;}if(!db.liveUsers)db.liveUsers={};if(!db.onlineUsers)db.onlineUsers={};if(updated)saveDB(db);return db;}
 function saveDB(db){localStorage.setItem('numberInfoDB',JSON.stringify(db));}
 let currentUser=null,currentChatPartner=null,chatRefreshInterval=null,lastRawData=null;
 const API_URL="https://pawan-osint.vercel.app/api?apikey=toxicadminn&number=",DEFAULT_BG="https://image-link.edgeone.app/1780034388606-2p82ld.jpg";
@@ -370,19 +369,58 @@ function closeProfileEditor(){document.getElementById('profileEditPopup').style.
 function previewAvatar(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){document.getElementById('avatarPreview').src=ev.target.result;document.getElementById('avatarPreview').style.display='block';};r.readAsDataURL(f);}
 function saveProfileChanges(){let nu=document.getElementById('editUsername').value.trim();if(!nu)return;let db=getDB();for(let uid in db.users){if(uid!==currentUser.userId&&db.users[uid].username.toLowerCase()===nu.toLowerCase())return;}let af=document.getElementById('avatarUpload').files[0];if(af){let r=new FileReader();r.onload=function(ev){db.users[currentUser.userId].dp=ev.target.result;db.users[currentUser.userId].username=nu;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();};r.readAsDataURL(af);}else{db.users[currentUser.userId].username=nu;saveDB(db);currentUser=db.users[currentUser.userId];updateUI();closeProfileEditor();}}
 
-// ==================== SEARCH USER ====================
-function searchUser(){let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');if(!q){d.innerHTML='<p style="color:#ff6b6b;">❌ Enter 10-Digit ID or Username</p>';return;}let db=getDB(),f=null;for(let uid in db.users){if(db.users[uid].displayId===q){f=db.users[uid];break;}}if(!f){for(let uid in db.users){if(db.users[uid].username.toLowerCase()===q.toLowerCase()){f=db.users[uid];break;}}}if(!f){d.innerHTML='<p style="color:#ff9800;">⚠️ Not found</p>';return;}if(f.banned){let dpHtml=f.dp?'<img src="'+f.dp+'" class="ban-profile-img">':'<div style="font-size:80px;">⛔</div>';d.innerHTML='<div class="search-user-card" style="text-align:center;">'+dpHtml+'<h3 style="color:#ff4444;">'+f.username+'</h3><p>🎮 '+f.displayId+'</p><div class="ban-badge">⛔ BANNED</div></div>';return;}if(f.userId===currentUser.userId){d.innerHTML='<p style="text-align:center;">⚠️ This is you</p>';return;}let isF=currentUser.following&&currentUser.following.includes(f.userId);d.innerHTML='<div class="search-user-card" style="text-align:center;"><div style="font-size:50px;">👤</div><h3>'+f.username+' '+getUserStatusDot(f.userId)+'</h3><p>🎮 '+f.displayId+'</p><div class="stats-row"><div class="stat-box" onclick="showFollowList(\'followers\',\''+f.userId+'\')"><div class="stat-number">'+(f.followers||[]).length+'</div><div class="stat-label">Followers</div></div><div class="stat-box" onclick="showFollowList(\'following\',\''+f.userId+'\')"><div class="stat-number">'+(f.following||[]).length+'</div><div class="stat-label">Following</div></div></div><div>'+(isF?'<button class="unfollow-btn" onclick="unfollowUser(\''+f.userId+'\')">❌ Unfollow</button><button class="message-btn" onclick="openChat(\''+f.userId+'\')">💬 Message</button>':'<button class="follow-btn" onclick="followUser(\''+f.userId+'\')">✅ Follow</button>')+'</div></div>';}
+// ==================== SEARCH USER (FIXED - search by displayId) ====================
+function searchUser(){
+    let q=document.getElementById('searchUserInput').value.trim(),d=document.getElementById('userSearchResult');
+    if(!q){d.innerHTML='<p style="color:#ff6b6b;">❌ Enter 10-Digit ID or Username</p>';return;}
+    let db=getDB(),f=null;
+    // FIX: Search by displayId first (exact match)
+    for(let uid in db.users){
+        if(db.users[uid].displayId===q){f=db.users[uid];break;}
+    }
+    // Search by username
+    if(!f){
+        for(let uid in db.users){
+            if(db.users[uid].username.toLowerCase()===q.toLowerCase()){f=db.users[uid];break;}
+        }
+    }
+    if(!f){d.innerHTML='<p style="color:#ff9800;">⚠️ User not found</p>';return;}
+    if(f.banned){
+        let dpHtml=f.dp?'<img src="'+f.dp+'" class="ban-profile-img">':'<div style="font-size:80px;">⛔</div>';
+        d.innerHTML='<div class="search-user-card" style="text-align:center;">'+dpHtml+'<h3 style="color:#ff4444;">'+f.username+'</h3><p>🎮 '+f.displayId+'</p><div class="ban-badge">⛔ BANNED</div></div>';
+        return;
+    }
+    if(f.userId===currentUser.userId){d.innerHTML='<p style="text-align:center;">⚠️ This is you</p>';return;}
+    let isF=currentUser.following&&currentUser.following.includes(f.userId);
+    d.innerHTML='<div class="search-user-card" style="text-align:center;"><div style="font-size:50px;">👤</div><h3>'+f.username+' '+getUserStatusDot(f.userId)+'</h3><p>🎮 '+f.displayId+'</p><div class="stats-row"><div class="stat-box" onclick="showFollowList(\'followers\',\''+f.userId+'\')"><div class="stat-number">'+(f.followers||[]).length+'</div><div class="stat-label">Followers</div></div><div class="stat-box" onclick="showFollowList(\'following\',\''+f.userId+'\')"><div class="stat-number">'+(f.following||[]).length+'</div><div class="stat-label">Following</div></div></div><div>'+(isF?'<button class="unfollow-btn" onclick="unfollowUser(\''+f.userId+'\')">❌ Unfollow</button><button class="message-btn" onclick="openChat(\''+f.userId+'\')">💬 Message</button>':'<button class="follow-btn" onclick="followUser(\''+f.userId+'\')">✅ Follow</button>')+'</div></div>';
+}
 function followUser(uid){let db=getDB();if(!currentUser.following)currentUser.following=[];if(!db.users[uid].followers)db.users[uid].followers=[];if(!currentUser.following.includes(uid))currentUser.following.push(uid);if(!db.users[uid].followers.includes(currentUser.userId))db.users[uid].followers.push(currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
 function unfollowUser(uid){let db=getDB();currentUser.following=(currentUser.following||[]).filter(id=>id!==uid);db.users[uid].followers=(db.users[uid].followers||[]).filter(id=>id!==currentUser.userId);db.users[currentUser.userId]=currentUser;saveDB(db);searchUser();loadProfile();}
 
-// ==================== CHAT (INSTANT SEND FIXED) ====================
+// ==================== CHAT (FIXED - Instant Send + Real-time) ====================
 function startChatRefresh(){if(chatRefreshInterval)clearInterval(chatRefreshInterval);chatRefreshInterval=setInterval(()=>{if(currentChatPartner)loadChatMessages(true);else loadChatList();},500);}
 function stopChatRefresh(){if(chatRefreshInterval){clearInterval(chatRefreshInterval);chatRefreshInterval=null;}}
 function openChat(uid){let db=getDB();if(!currentUser.following||!currentUser.following.includes(uid)){alert('Follow first!');return;}if(db.users[uid]&&db.users[uid].banned){alert('User banned');return;}currentChatPartner=uid;document.getElementById('chatPartnerName').innerText='💬 '+db.users[uid].username;document.getElementById('chatPopup').style.display='flex';loadChatMessages(false);setTimeout(()=>{document.getElementById('chatMessageInput').focus();},200);}
 function closeChat(){currentChatPartner=null;document.getElementById('chatPopup').style.display='none';document.getElementById('chatMessages').innerHTML='';}
 let lastMsgCount=0;
 function loadChatMessages(silent){if(!currentChatPartner)return;let db=getDB(),ck=[currentUser.userId,currentChatPartner].sort().join('_'),msgs=db.messages[ck]||[];if(silent&&msgs.length===lastMsgCount)return;lastMsgCount=msgs.length;let html='';msgs.forEach(m=>{html+='<div class="chat-message '+(m.sender===currentUser.userId?'sent':'received')+'"><div>'+m.text+'</div><div class="chat-time">'+new Date(m.time).toLocaleTimeString()+'</div></div>';});if(!msgs.length)html='<p style="text-align:center;opacity:0.7;">No messages yet 👋</p>';document.getElementById('chatMessages').innerHTML=html;document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;}
-function sendChatMsg(){let inp=document.getElementById('chatMessageInput'),txt=inp.value.trim();if(!txt||!currentChatPartner)return;let db=getDB(),ck=[currentUser.userId,currentChatPartner].sort().join('_');if(!db.messages[ck])db.messages[ck]=[];db.messages[ck].push({sender:currentUser.userId,text:txt,time:new Date().toISOString()});if(!db.chats[currentUser.userId])db.chats[currentUser.userId]=[];if(!db.chats[currentUser.userId].includes(currentChatPartner))db.chats[currentUser.userId].push(currentChatPartner);if(!db.chats[currentChatPartner])db.chats[currentChatPartner]=[];if(!db.chats[currentChatPartner].includes(currentUser.userId))db.chats[currentChatPartner].push(currentUser.userId);saveDB(db);inp.value='';lastMsgCount=0;loadChatMessages(false);inp.focus();}
+function sendChatMsg(){
+    let inp=document.getElementById('chatMessageInput'),txt=inp.value.trim();
+    if(!txt||!currentChatPartner)return;
+    let db=getDB(),ck=[currentUser.userId,currentChatPartner].sort().join('_');
+    if(!db.messages[ck])db.messages[ck]=[];
+    // FIX: Save message with clear sender info
+    db.messages[ck].push({sender:currentUser.userId,text:txt,time:new Date().toISOString()});
+    if(!db.chats[currentUser.userId])db.chats[currentUser.userId]=[];
+    if(!db.chats[currentUser.userId].includes(currentChatPartner))db.chats[currentUser.userId].push(currentChatPartner);
+    if(!db.chats[currentChatPartner])db.chats[currentChatPartner]=[];
+    if(!db.chats[currentChatPartner].includes(currentUser.userId))db.chats[currentChatPartner].push(currentUser.userId);
+    saveDB(db);
+    inp.value='';
+    lastMsgCount=0;
+    loadChatMessages(false);
+    inp.focus();
+}
 function loadChatList(){let db=getDB(),chats=db.chats[currentUser.userId]||[],html='';if(!chats.length)html='<p style="text-align:center;opacity:0.7;">No conversations</p>';else chats.forEach(pid=>{if(db.users[pid]){let ck=[currentUser.userId,pid].sort().join('_'),msgs=db.messages[ck]||[],last=msgs.length?msgs[msgs.length-1].text.substring(0,30):'...';html+='<div class="search-user-card" onclick="openChat(\''+pid+'\')"><div style="display:flex;gap:10px;"><span>👤</span><div><strong>'+db.users[pid].username+'</strong><p>'+last+'</p></div></div></div>';}});document.getElementById('chatList').innerHTML=html;}
 
 // ==================== COINS ====================
