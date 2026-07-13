@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SATVIR_EXPLOITS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- User Nav -->
+    <nav class="navbar user-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>⚡ SATVIR_EXPLOITS</h1>
+                <span class="badge">USER</span>
+            </div>
+            <div class="nav-links">
+                <span class="user-name" id="userName">👤 User</span>
+                <button onclick="logout()" class="btn-logout">🚪 Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Dashboard -->
+    <div class="user-container">
+        <!-- Stats -->
+        <div class="user-stats">
+            <div class="stat-card">
+                <h3>My Bots</h3>
+                <p id="myBots">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Running</h3>
+                <p id="runningBots">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Uptime</h3>
+                <p id="uptime">0%</p>
+            </div>
+            <div class="stat-card">
+                <h3>Credits</h3>
+                <p id="credits">0</p>
+            </div>
+        </div>
+
+        <!-- Deploy Bot -->
+        <div class="user-section">
+            <h2>🚀 Deploy New Bot</h2>
+            <form onsubmit="deployBot(event)">
+                <div class="form-group">
+                    <label>🤖 Bot Name</label>
+                    <input type="text" id="botName" placeholder="Enter bot name" required>
+                </div>
+                <div class="form-group">
+                    <label>🔑 Bot Token</label>
+                    <input type="text" id="botToken" placeholder="Enter Telegram Bot Token" required>
+                </div>
+                <button type="submit" class="btn-deploy">🚀 Deploy Bot</button>
+            </form>
+        </div>
+
+        <!-- My Bots -->
+        <div class="user-section">
+            <h2>🤖 My Bots</h2>
+            <table id="botsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bot Name</th>
+                        <th>Status</th>
+                        <th>Uptime</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="botsBody">
+                    <tr><td colspan="5">No bots deployed yet</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Buy Credits -->
+        <div class="user-section">
+            <h2>💳 Buy Credits</h2>
+            <div class="credit-plans">
+                <div class="credit-card" onclick="buyCredits(100)">
+                    <h3>₹100</h3>
+                    <p>100 Credits</p>
+                    <button>Buy Now</button>
+                </div>
+                <div class="credit-card" onclick="buyCredits(500)">
+                    <h3>₹500</h3>
+                    <p>500 Credits</p>
+                    <button>Buy Now</button>
+                </div>
+                <div class="credit-card" onclick="buyCredits(1000)">
+                    <h3>₹1000</h3>
+                    <p>1000 Credits</p>
+                    <button>Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+        });
+    </script>
+</body>
+</html>

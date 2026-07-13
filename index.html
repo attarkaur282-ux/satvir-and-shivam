@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker VPS - SATVIR_EXPLOITS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>⚡ SATVIR_EXPLOITS</h1>
+                <span class="badge">HACKER VPS</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#" onclick="openLogin()">Login</a>
+                <a href="#" onclick="openRegister()" class="btn-nav">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>🔥 HACKER LEVEL VPS</h1>
+            <p>Host Your Telegram Bots with <span class="highlight">SATVIR_EXPLOITS</span></p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h2>1000+</h2>
+                    <p>Bots Hosted</p>
+                </div>
+                <div class="stat">
+                    <h2>99.9%</h2>
+                    <p>Uptime</p>
+                </div>
+                <div class="stat">
+                    <h2>24/7</h2>
+                    <p>Support</p>
+                </div>
+            </div>
+            <button class="btn-hero" onclick="openRegister()">🚀 Get Started</button>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <h2>⚡ Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">🤖</div>
+                <h3>Bot Hosting</h3>
+                <p>Host unlimited Telegram bots with high performance</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <h3>Secure VPS</h3>
+                <p>Military grade security with DDoS protection</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Ultra Fast</h3>
+                <p>Lightning fast response time for your bots</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🎯</div>
+                <h3>Easy Deploy</h3>
+                <p>Deploy your bot in just one click</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Analytics</h3>
+                <p>Track your bot performance in real-time</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🛡️</div>
+                <h3>24/7 Support</h3>
+                <p>Expert support available round the clock</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <h2>💰 Pricing Plans</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Free</h3>
+                <div class="price">₹0</div>
+                <ul>
+                    <li>✅ 1 Bot</li>
+                    <li>✅ Basic Features</li>
+                    <li>✅ 24/7 Support</li>
+                    <li>❌ Premium Features</li>
+                </ul>
+                <button onclick="openRegister()">Get Started</button>
+            </div>
+            <div class="pricing-card popular">
+                <span class="popular-badge">🔥 POPULAR</span>
+                <h3>Pro</h3>
+                <div class="price">₹499</div>
+                <ul>
+                    <li>✅ Unlimited Bots</li>
+                    <li>✅ Advanced Features</li>
+                    <li>✅ Priority Support</li>
+                    <li>✅ Analytics Dashboard</li>
+                </ul>
+                <button onclick="openRegister()">Get Started</button>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price">₹999</div>
+                <ul>
+                    <li>✅ Unlimited Bots</li>
+                    <li>✅ All Features</li>
+                    <li>✅ Dedicated Server</li>
+                    <li>✅ Custom Solutions</li>
+                </ul>
+                <button onclick="openRegister()">Contact Us</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Login</h2>
+                <span class="close" onclick="closeLogin()">&times;</span>
+            </div>
+            <form onsubmit="loginUser(event)">
+                <div class="form-group">
+                    <label>👤 Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn-submit">🔓 Login</button>
+                <p class="switch-text">Don't have account? <span onclick="switchToRegister()">Register</span></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 Register</h2>
+                <span class="close" onclick="closeRegister()">&times;</span>
+            </div>
+            <form onsubmit="registerUser(event)">
+                <div class="form-group">
+                    <label>👤 Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose username" required>
+                </div>
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="regEmail" placeholder="Enter email" required>
+                </div>
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="regPassword" placeholder="Choose password" required>
+                </div>
+                <div class="form-group">
+                    <label>🔒 Confirm Password</label>
+                    <input type="password" id="regConfirm" placeholder="Confirm password" required>
+                </div>
+                <button type="submit" class="btn-submit">📝 Register</button>
+                <p class="switch-text">Already have account? <span onclick="switchToLogin()">Login</span></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>👑 Developed by <strong>SATVIR_EXPLOITS</strong></p>
+            <p>💬 Contact: @SATVIR_EXPLOITS</p>
+            <p>© 2024 SATVIR_EXPLOITS - All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

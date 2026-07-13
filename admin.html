@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SATVIR_EXPLOITS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Admin Nav -->
+    <nav class="navbar admin-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>👑 SATVIR_EXPLOITS</h1>
+                <span class="badge">ADMIN</span>
+            </div>
+            <div class="nav-links">
+                <span class="admin-user">👤 Admin</span>
+                <button onclick="logout()" class="btn-logout">🚪 Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container">
+        <!-- Stats -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p id="totalUsers">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Bots</h3>
+                <p id="totalBots">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Running Bots</h3>
+                <p id="runningBots">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Revenue</h3>
+                <p id="totalRevenue">₹0</p>
+            </div>
+        </div>
+
+        <!-- Users List -->
+        <div class="admin-section">
+            <h2>👥 Users</h2>
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Bots</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="usersBody">
+                    <tr><td colspan="6">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bots List -->
+        <div class="admin-section">
+            <h2>🤖 Bots</h2>
+            <table id="botsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bot Name</th>
+                        <th>Owner</th>
+                        <th>Token</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="botsBody">
+                    <tr><td colspan="6">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pending Payments -->
+        <div class="admin-section">
+            <h2>💳 Pending Payments</h2>
+            <table id="paymentsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Plan</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsBody">
+                    <tr><td colspan="6">No pending payments</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Admin Actions -->
+        <div class="admin-section">
+            <h2>🛠 Admin Actions</h2>
+            <div class="admin-actions">
+                <button onclick="refreshData()">🔄 Refresh Data</button>
+                <button onclick="addBot()">➕ Add Bot</button>
+                <button onclick="broadcast()">📢 Broadcast</button>
+                <button onclick="exportData()">📤 Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bot Modal -->
+    <div id="addBotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🤖 Add Bot</h2>
+                <span class="close" onclick="closeAddBot()">&times;</span>
+            </div>
+            <form onsubmit="submitBot(event)">
+                <div class="form-group">
+                    <label>🤖 Bot Name</label>
+                    <input type="text" id="botName" placeholder="Enter bot name" required>
+                </div>
+                <div class="form-group">
+                    <label>🔑 Bot Token</label>
+                    <input type="text" id="botToken" placeholder="Enter Telegram Bot Token" required>
+                </div>
+                <div class="form-group">
+                    <label>👤 Owner ID</label>
+                    <input type="number" id="botOwner" placeholder="Enter owner Telegram ID" required>
+                </div>
+                <button type="submit" class="btn-submit">🚀 Deploy Bot</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Load admin data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminData();
+        });
+    </script>
+</body>
+</html>
